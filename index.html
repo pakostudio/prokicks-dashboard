@@ -17,6 +17,7 @@
       --accent:#ef8f1a;
       --accent-2:#ffab3d;
       --accent-soft:#fff1dd;
+      --accent-dark:#a85d00;
 
       --green:#1f9d55;
       --green-bg:#e8f8ef;
@@ -46,7 +47,7 @@
     }
 
     .app{
-      max-width: 1620px;
+      max-width: 1660px;
       margin: 0 auto;
       padding: 18px 18px 28px;
     }
@@ -79,7 +80,7 @@
 
     .title{
       margin:0;
-      font-size: clamp(26px, 4vw, 42px);
+      font-size: clamp(26px, 4vw, 40px);
       line-height:1;
       font-weight:900;
       color:#20242c;
@@ -88,7 +89,7 @@
     .subtitle{
       margin:8px 0 0;
       color:var(--muted);
-      font-size:13px;
+      font-size:12px;
     }
 
     .hero-actions{
@@ -102,7 +103,7 @@
       cursor:pointer;
       border-radius:14px;
       padding:10px 14px;
-      font-size:13px;
+      font-size:12px;
       font-weight:800;
       transition:.18s ease;
     }
@@ -131,7 +132,7 @@
 
     .btn-soft{
       background:var(--accent-soft);
-      color:#9b5a00;
+      color:var(--accent-dark);
       border:1px solid #f2cf9d;
     }
 
@@ -147,7 +148,7 @@
       cursor:pointer;
       border-radius:14px;
       padding:10px 14px;
-      font-size:13px;
+      font-size:12px;
       font-weight:800;
       background:#fff;
       color:var(--muted);
@@ -173,7 +174,7 @@
       border-radius:22px;
       box-shadow:var(--shadow);
       padding:14px 14px 12px;
-      min-height:110px;
+      min-height:108px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
@@ -215,7 +216,7 @@
 
     .panel-title{
       margin:0;
-      font-size:22px;
+      font-size:21px;
       line-height:1;
       font-weight:900;
       color:#232832;
@@ -236,7 +237,7 @@
       background:#fffaf5;
       border:1px solid var(--line);
       color:#8c6b43;
-      font-size:12px;
+      font-size:11px;
       font-weight:800;
     }
 
@@ -255,7 +256,7 @@
 
     table{
       width:100%;
-      min-width:1300px;
+      min-width:1400px;
       border-collapse:collapse;
     }
 
@@ -447,7 +448,7 @@
 
     .modal-title{
       margin:0;
-      font-size:22px;
+      font-size:21px;
       font-weight:900;
       color:#232832;
     }
@@ -461,7 +462,7 @@
     .close{
       border:none;
       background:var(--accent-soft);
-      color:#9b5a00;
+      color:var(--accent-dark);
       width:38px;
       height:38px;
       border-radius:12px;
@@ -569,7 +570,7 @@
         <div>
           <div class="eyebrow">Sistema operativo comercial</div>
           <h1 class="title">PRO KICKS INVENTARIO</h1>
-          <p class="subtitle">Dashboard, ventas, inventario en uso, cobranza y CRM conectados al Google Sheet central.</p>
+          <p class="subtitle">Dashboard, ventas, inventario en uso, cobranza y CRM.</p>
         </div>
 
         <div class="hero-actions">
@@ -617,11 +618,34 @@
     }
 
     function cleanComodatos(rows){
-      return safeArray(rows).filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"));
+      return safeArray(rows)
+        .filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"))
+        .map((r, idx) => ({
+          numero: r.numero ?? r.num ?? (idx + 1),
+          cliente: r.cliente ?? "--",
+          contacto: r.contacto ?? "--",
+          rep: r.rep ?? "--",
+          devices: r.devices ?? "--",
+          estado: r.estado ?? "--",
+          fechaEntrega: r.fechaEntrega ?? "--",
+          fechaDevolucion: r.fechaDevolucion ?? "--",
+          ciudad: r.ciudad ?? "--",
+          notas: r.notas ?? "--"
+        }));
     }
 
     function cleanCobranza(rows){
-      return safeArray(rows).filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"));
+      return safeArray(rows)
+        .filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"))
+        .map((r, idx) => ({
+          numero: r.numero ?? r.num ?? (idx + 1),
+          cliente: r.cliente ?? "--",
+          rep: r.rep ?? "--",
+          montoTotal: r.montoTotal ?? r.monto ?? "--",
+          saldoPend: r.saldoPend ?? r.saldo ?? "--",
+          estado: r.estado ?? "--",
+          accion: r.accion ?? "--"
+        }));
     }
 
     function normalizePipelineRows(rows){
@@ -658,10 +682,10 @@
       const up = txt.toUpperCase();
 
       if (!txt || txt === "--") return `<span class="badge b-gray">--</span>`;
-      if (up.includes("PAGADO") || up.includes("CERRADA") || up.includes("EN USO") || up === "NUEVO") return `<span class="badge b-green">${txt}</span>`;
+      if (up.includes("PAGADO") || up.includes("CERRADA") || up.includes("EN USO") || up === "NUEVO" || up.includes("SI")) return `<span class="badge b-green">${txt}</span>`;
       if (up.includes("PENDIENTE")) return `<span class="badge b-yellow">${txt}</span>`;
-      if (up.includes("INCOMPLETA") || up.includes("PROSPECCIÓN") || up.includes("PROSPECCION") || up.includes("DEMO") || up.includes("PROPUESTA") || up.includes("NEGOCIACIÓN") || up.includes("NEGOCIACION") || up.includes("CONTACTADO")) return `<span class="badge b-blue">${txt}</span>`;
-      if (up.includes("PERDIDO")) return `<span class="badge b-red">${txt}</span>`;
+      if (up.includes("INCOMPLETA") || up.includes("PROSPECCIÓN") || up.includes("PROSPECCION") || up.includes("DEMO") || up.includes("PROPUESTA") || up.includes("NEGOCIACIÓN") || up.includes("NEGOCIACION") || up.includes("CONTACTADO") || up.includes("ENVIADO")) return `<span class="badge b-blue">${txt}</span>`;
+      if (up.includes("PERDIDO") || up.includes("NO")) return `<span class="badge b-red">${txt}</span>`;
       return `<span class="badge b-gray">${txt}</span>`;
     }
 
@@ -836,10 +860,10 @@
                       <td>${badge(r.estadoPago || "--")}</td>
                       <td>${r.saldoPend || "--"}</td>
                       <td>${r.formaPago || "--"}</td>
-                      <td>${r.entrega || "--"}</td>
+                      <td>${badge(r.entrega || "--")}</td>
                       <td>${r.fechaEntrega || "--"}</td>
                       <td>${r.ciudad || "--"}</td>
-                      <td>${r.conFactura || "--"}</td>
+                      <td>${badge(r.conFactura || "--")}</td>
                       <td class="wrap">${r.notas || "--"}</td>
                     </tr>
                   `).join("")
@@ -860,20 +884,25 @@
           <div class="panel-head">
             <div>
               <h2 class="panel-title">Inventario en uso</h2>
-              <p class="panel-subtitle">Equipos colocados actualmente.</p>
+              <p class="panel-subtitle">Todas las columnas activas de la pestaña de comodato.</p>
             </div>
             <div class="meta-pill">${rows.length} registros</div>
           </div>
 
           <div class="table-wrap">
-            <table style="min-width:900px">
+            <table style="min-width:1200px">
               <thead>
                 <tr>
-                  <th>Cliente</th>
+                  <th>#</th>
+                  <th>Cliente / Club</th>
+                  <th>Contacto</th>
                   <th>Rep</th>
                   <th>Devices</th>
-                  <th>Status</th>
+                  <th>Estado</th>
+                  <th>F. entrega</th>
+                  <th>F. devolución</th>
                   <th>Ciudad</th>
+                  <th>Notas</th>
                 </tr>
               </thead>
               <tbody>
@@ -881,14 +910,19 @@
                   rows.length
                   ? rows.map(r => `
                     <tr>
+                      <td>${r.numero ?? "--"}</td>
                       <td class="name">${r.cliente || "--"}</td>
+                      <td>${r.contacto || "--"}</td>
                       <td>${r.rep || "--"}</td>
                       <td>${r.devices || "--"}</td>
                       <td>${badge(r.estado || "--")}</td>
+                      <td>${r.fechaEntrega || "--"}</td>
+                      <td>${r.fechaDevolucion || "--"}</td>
                       <td>${r.ciudad || "--"}</td>
+                      <td class="wrap">${r.notas || "--"}</td>
                     </tr>
                   `).join("")
-                  : `<tr><td colspan="5" class="empty">Sin registros.</td></tr>`
+                  : `<tr><td colspan="10" class="empty">Sin registros.</td></tr>`
                 }
               </tbody>
             </table>
@@ -905,19 +939,22 @@
           <div class="panel-head">
             <div>
               <h2 class="panel-title">Cobranza</h2>
-              <p class="panel-subtitle">Saldos pendientes visibles desde la misma base de datos.</p>
+              <p class="panel-subtitle">Todas las columnas activas de la pestaña de cobranza.</p>
             </div>
             <div class="meta-pill">${rows.length} registros</div>
           </div>
 
           <div class="table-wrap">
-            <table style="min-width:900px">
+            <table style="min-width:1100px">
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Cliente</th>
                   <th>Rep</th>
-                  <th>Saldo</th>
-                  <th>Status</th>
+                  <th>Monto total</th>
+                  <th>Saldo pend.</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -925,13 +962,16 @@
                   rows.length
                   ? rows.map(r => `
                     <tr>
+                      <td>${r.numero ?? "--"}</td>
                       <td class="name">${r.cliente || "--"}</td>
                       <td>${r.rep || "--"}</td>
-                      <td>${r.saldo || "--"}</td>
+                      <td>${r.montoTotal || "--"}</td>
+                      <td>${r.saldoPend || "--"}</td>
                       <td>${badge(r.estado || "--")}</td>
+                      <td class="wrap">${r.accion || "--"}</td>
                     </tr>
                   `).join("")
-                  : `<tr><td colspan="4" class="empty">Sin registros.</td></tr>`
+                  : `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`
                 }
               </tbody>
             </table>
@@ -948,7 +988,7 @@
           <div class="panel-head">
             <div>
               <h2 class="panel-title">CRM</h2>
-              <p class="panel-subtitle">Leads visibles, editables y sincronizados con el Sheet.</p>
+              <p class="panel-subtitle">Leads visibles, editables y sincronizados con la hoja.</p>
             </div>
 
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
