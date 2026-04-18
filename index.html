@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PRO KICKS - Sales + CRM</title>
-  <script src="https://www.gstatic.com/charts/loader.js"></script>
   <style>
     :root{
       --bg:#F8F7F4;
@@ -27,307 +26,65 @@
       --gray-bg:#F3F4F6;
     }
     *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      font-size:14px
-    }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
     .app{display:flex;flex-direction:column;min-height:100vh}
-    #mainNav{
-      background:var(--accent);
-      padding:0 16px;
-      display:flex;
-      align-items:center;
-      gap:6px;
-      height:74px;
-      overflow-x:auto
-    }
-    .logo{
-      color:#fff;
-      font-weight:900;
-      font-size:20px;
-      letter-spacing:.2px;
-      margin-right:18px;
-      white-space:nowrap
-    }
-    .nav-tab{
-      background:none;
-      border:none;
-      color:rgba(255,255,255,.72);
-      padding:14px 18px;
-      border-radius:12px;
-      cursor:pointer;
-      font-size:13px;
-      font-weight:700;
-      white-space:nowrap;
-      transition:all .15s
-    }
-    .nav-tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+    #mainNav{background:var(--accent);padding:0 16px;display:flex;align-items:center;gap:6px;height:74px;overflow-x:auto}
+    .logo{color:#fff;font-weight:900;font-size:20px;letter-spacing:.2px;margin-right:18px;white-space:nowrap}
+    .nav-tab{background:none;border:none;color:rgba(255,255,255,.72);padding:14px 18px;border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;white-space:nowrap}
     .nav-tab.on{color:#fff;background:rgba(255,255,255,.14)}
-    #mainContent{
-      flex:1;
-      padding:28px 30px 40px;
-      max-width:1920px;
-      width:100%;
-      margin:0 auto
-    }
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:22px;
-      flex-wrap:wrap
-    }
+    #mainContent{flex:1;padding:28px 30px 40px;max-width:1920px;width:100%;margin:0 auto}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap}
     h1{font-size:28px;font-weight:900}
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 16px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:#fff;
-      color:var(--text);
-      cursor:pointer;
-      font-size:13px;
-      font-weight:800;
-      transition:all .15s
-    }
-    .btn:hover{transform:translateY(-1px)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer;font-size:13px;font-weight:800}
     .btn-dark{background:var(--accent);color:#fff;border-color:var(--accent)}
     .btn-sm{padding:8px 12px;font-size:12px;border-radius:10px}
-    .kpi-row{
-      display:grid;
-      grid-template-columns:repeat(6,minmax(180px,1fr));
-      gap:18px;
-      margin-bottom:28px
-    }
-    .kpi{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      min-height:154px;
-      padding:18px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center
-    }
-    .kpi-val{
-      font-size:40px;
-      line-height:1;
-      font-weight:900;
-      margin-bottom:12px
-    }
-    .kpi-label{
-      font-size:15px;
-      color:var(--muted);
-      font-weight:800
-    }
-    .card{
-      background:#fff;
-      border:1px solid var(--border);
-      border-radius:20px;
-      padding:28px;
-      margin-bottom:18px
-    }
-    .card-title{
-      font-size:18px;
-      color:var(--muted);
-      font-weight:900;
-      margin-bottom:20px;
-      text-transform:uppercase;
-      letter-spacing:.4px
-    }
+    .kpi-row{display:grid;grid-template-columns:repeat(6,minmax(180px,1fr));gap:18px;margin-bottom:28px}
+    .kpi{background:var(--card);border:1px solid var(--border);border-radius:18px;min-height:154px;padding:18px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+    .kpi-val{font-size:40px;line-height:1;font-weight:900;margin-bottom:12px}
+    .kpi-label{font-size:15px;color:var(--muted);font-weight:800}
+    .card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:18px}
+    .card-title{font-size:18px;color:var(--muted);font-weight:900;margin-bottom:20px;text-transform:uppercase;letter-spacing:.4px}
     .actions{display:flex;gap:14px;flex-wrap:wrap}
-    .tbl-wrap{
-      overflow:auto;
-      border:1px solid var(--border);
-      border-radius:18px;
-      background:#fff
-    }
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:980px;
-      background:#fff
-    }
-    th{
-      text-align:left;
-      font-size:12px;
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:.4px;
-      padding:14px 16px;
-      border-bottom:1px solid var(--border);
-      background:#faf9f7
-    }
-    td{
-      padding:14px 16px;
-      border-bottom:1px solid var(--border);
-      vertical-align:top
-    }
+    .tbl-wrap{overflow:auto;border:1px solid var(--border);border-radius:18px;background:#fff}
+    table{width:100%;border-collapse:collapse;min-width:980px;background:#fff}
+    th{text-align:left;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;padding:14px 16px;border-bottom:1px solid var(--border);background:#faf9f7}
+    td{padding:14px 16px;border-bottom:1px solid var(--border);vertical-align:top}
     tr:last-child td{border-bottom:none}
     .strong{font-weight:900}
     .muted{color:var(--muted)}
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:5px 10px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:900;
-      white-space:nowrap
-    }
+    .badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap}
     .green{background:var(--green-bg);color:var(--green)}
     .red{background:var(--red-bg);color:var(--red)}
     .blue{background:var(--blue-bg);color:var(--blue)}
     .yellow{background:var(--yellow-bg);color:var(--yellow)}
     .purple{background:var(--purple-bg);color:var(--purple)}
     .gray{background:var(--gray-bg);color:var(--gray)}
-    .toolbar{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:18px
-    }
-    .search{
-      flex:1;
-      min-width:220px;
-      padding:10px 12px;
-      border:1px solid var(--border);
-      border-radius:12px;
-      font-size:13px;
-      outline:none
-    }
-    .search:focus{border-color:var(--accent)}
-    .stage-row{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom:18px
-    }
-    .stage-pill{
-      border:1px solid var(--border);
-      background:#fff;
-      border-radius:999px;
-      padding:7px 12px;
-      font-size:12px;
-      font-weight:800;
-      cursor:pointer
-    }
+    .toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+    .search{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:13px;outline:none}
+    .stage-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+    .stage-pill{border:1px solid var(--border);background:#fff;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:800;cursor:pointer}
     .stage-pill.on{background:var(--accent);color:#fff;border-color:var(--accent)}
-    .modal-overlay{
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.45);
-      z-index:999;
-      align-items:center;
-      justify-content:center;
-      padding:20px
-    }
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;padding:20px}
     .modal-overlay.open{display:flex}
-    .modal{
-      background:#fff;
-      border-radius:20px;
-      padding:26px;
-      width:620px;
-      max-width:100%;
-      max-height:90vh;
-      overflow:auto;
-      box-shadow:0 20px 60px rgba(0,0,0,.22)
-    }
-    .modal-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      margin-bottom:18px
-    }
+    .modal{background:#fff;border-radius:20px;padding:26px;width:620px;max-width:100%;max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+    .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
     .modal-title{font-size:20px;font-weight:900}
-    .close{
-      width:34px;
-      height:34px;
-      border-radius:10px;
-      border:1px solid var(--border);
-      background:#fff;
-      cursor:pointer;
-      font-size:18px
-    }
-    .form-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-      margin-bottom:14px
-    }
+    .close{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:18px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
     .form-grid.full{grid-template-columns:1fr}
     .fg{display:flex;flex-direction:column;gap:6px}
-    .fg label{
-      font-size:11px;
-      color:var(--muted);
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.35px
-    }
-    .fg input,.fg select,.fg textarea{
-      width:100%;
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:10px 12px;
-      font-size:13px;
-      outline:none;
-      font-family:inherit;
-      background:#fff
-    }
+    .fg label{font-size:11px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.35px}
+    .fg input,.fg select,.fg textarea{width:100%;border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:13px;outline:none;font-family:inherit;background:#fff}
     .fg textarea{min-height:90px;resize:vertical}
-    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--accent)}
-    .note{
-      background:#faf9f7;
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:12px;
-      margin-bottom:10px
-    }
+    .note{background:#faf9f7;border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}
     .note-meta{font-size:11px;color:var(--muted);margin-top:6px}
-    .loader,.empty,.error{
-      padding:18px;
-      border-radius:16px;
-      background:#fff;
-      border:1px solid var(--border)
-    }
+    .loader,.empty,.error{padding:18px;border-radius:16px;background:#fff;border:1px solid var(--border)}
     .loader,.empty{color:var(--muted)}
     .error{color:var(--red);font-weight:800}
-    #toast{
-      position:fixed;
-      right:20px;
-      bottom:20px;
-      z-index:1100;
-      display:flex;
-      flex-direction:column;
-      gap:10px
-    }
-    .toast-item{
-      background:#111827;
-      color:#fff;
-      padding:12px 16px;
-      border-radius:12px;
-      font-size:13px;
-      font-weight:800;
-      box-shadow:0 8px 30px rgba(0,0,0,.18)
-    }
+    #toast{position:fixed;right:20px;bottom:20px;z-index:1100;display:flex;flex-direction:column;gap:10px}
+    .toast-item{background:#111827;color:#fff;padding:12px 16px;border-radius:12px;font-size:13px;font-weight:800;box-shadow:0 8px 30px rgba(0,0,0,.18)}
     @media(max-width:1400px){.kpi-row{grid-template-columns:repeat(3,minmax(180px,1fr))}}
-    @media(max-width:860px){
-      #mainContent{padding:18px}
-      .kpi-row{grid-template-columns:repeat(2,minmax(140px,1fr))}
-      .form-grid{grid-template-columns:1fr}
-      h1{font-size:24px}
-    }
+    @media(max-width:860px){#mainContent{padding:18px}.kpi-row{grid-template-columns:repeat(2,minmax(140px,1fr))}.form-grid{grid-template-columns:1fr}h1{font-size:24px}}
     @media(max-width:560px){.kpi-row{grid-template-columns:1fr}}
   </style>
 </head>
@@ -348,34 +105,14 @@
   <div id="toast"></div>
 
   <script>
-    google.charts.load('current', {packages:['corechart']});
-
-    const SHEET_ID = "1Ctv4JwJDc8MnIjp4B6_ekYI0WjqMgprPOB0ceh9lEAs";
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-0yjy3y6cg_f9sqEb35MN1UkKuWYD7UZkVdSyjmxxSnx-oKsvADbL0U3whtuRh7vEZg/exec";
-
-    const GIDS = {
-      dashboard: "331472093",
-      pipeline: "2026795846",
-      comodatos: "231746842",
-      cobranza: "235277202"
-    };
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwgFFETGiM1HRPbf0RSDr0hspskLwkFLJlmNRG_ud_o7PaVgJf4aF2PAWIJPtWYI89jGQ/exec";
 
     let currentTab = "dashboard";
-    let dashboardData = {
-      cerradas: 0,
-      incompletas: 0,
-      comodato: 0,
-      totalDevices: 0,
-      producidos: 0,
-      redwood: 0,
-      diferencia: 0
-    };
-
+    let dashboardData = {};
     let crmLeads = [];
     let pipelineRows = [];
     let comodatoRows = [];
     let cobranzaRows = [];
-
     let crmSearch = "";
     let crmStage = "";
 
@@ -393,21 +130,12 @@
     }
 
     function normalize(s){
-      return String(s || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\s+/g, " ")
-        .trim()
-        .toUpperCase();
+      return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toUpperCase();
     }
 
     function toNumber(v){
-      const n = String(v || "")
-        .replace(/\$/g, "")
-        .replace(/\s/g, "")
-        .replace(/\.(?=\d{3})/g, "")
-        .replace(/,/g, ".");
-      return Number(n) || 0;
+      const s = String(v || "").replace(/\$/g,"").replace(/\s/g,"").replace(/\.(?=\d{3})/g,"").replace(/,/g,".");
+      return Number(s) || 0;
     }
 
     function money(v){
@@ -420,7 +148,7 @@
       if(v === "PAGADO" || v === "ENTREGADO" || v === "CERRADO" || v === "DEVUELTO") return `<span class="badge green">${value || "--"}</span>`;
       if(v === "PENDIENTE") return `<span class="badge yellow">${value || "--"}</span>`;
       if(v === "ENVIADO" || v === "EN USO" || v === "CONTACTADO") return `<span class="badge blue">${value || "--"}</span>`;
-      if(v === "NUEVO" || v === "PROPUESTA" || v === "NEGOCIACION" || v === "NEGOCIACIÓN" || v === "DEMO") return `<span class="badge purple">${value || "--"}</span>`;
+      if(v === "NUEVO" || v === "PROPUESTA" || v === "NEGOCIACIÓN" || v === "NEGOCIACION" || v === "DEMO") return `<span class="badge purple">${value || "--"}</span>`;
       if(v === "PERDIDO" || v === "NO ENVIADO") return `<span class="badge red">${value || "--"}</span>`;
       return `<span class="badge gray">${value || "--"}</span>`;
     }
@@ -432,130 +160,52 @@
     }
 
     function showLoading(title){
-      document.getElementById("mainContent").innerHTML = `
-        <div class="topbar"><h1>${title}</h1></div>
-        <div class="loader">Cargando información...</div>
-      `;
+      document.getElementById("mainContent").innerHTML = `<div class="topbar"><h1>${title}</h1></div><div class="loader">Cargando información...</div>`;
     }
 
     function showError(msg){
-      document.getElementById("mainContent").innerHTML = `
-        <div class="topbar"><h1>Error</h1></div>
-        <div class="error">${msg}</div>
-      `;
+      document.getElementById("mainContent").innerHTML = `<div class="topbar"><h1>Error</h1></div><div class="error">${msg}</div>`;
     }
 
-    function querySheet(gid, query = "select *"){
-      return new Promise((resolve, reject) => {
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${gid}&headers=0&tq=${encodeURIComponent(query)}`;
-        const q = new google.visualization.Query(url);
-        q.send(response => {
-          if(response.isError()){
-            reject(new Error(response.getMessage()));
-            return;
-          }
-          resolve(response.getDataTable());
-        });
-      });
+    async function apiGet(action){
+      const res = await fetch(APPS_SCRIPT_URL + "?action=" + encodeURIComponent(action), {cache:"no-store"});
+      return await res.json();
     }
 
-    function dtToRows(dt){
-      const rows = [];
-      const cols = dt.getNumberOfColumns();
-      const totalRows = dt.getNumberOfRows();
-      for(let r = 0; r < totalRows; r++){
-        const row = [];
-        for(let c = 0; c < cols; c++){
-          row.push(dt.getFormattedValue(r, c) || dt.getValue(r, c) || "");
-        }
-        rows.push(row);
-      }
-      return rows;
+    async function apiPost(data){
+      const body = new URLSearchParams(data);
+      const res = await fetch(APPS_SCRIPT_URL, { method:"POST", body });
+      return await res.json();
     }
 
     async function loadDashboard(){
-      const dt = await querySheet(GIDS.dashboard, "select * offset 5 limit 2");
-      const rows = dtToRows(dt);
-      const data = rows[1] || rows[0] || [];
-
-      dashboardData = {
-        cerradas: toNumber(data[0]),
-        incompletas: toNumber(data[1]),
-        comodato: toNumber(data[2]),
-        totalDevices: toNumber(data[3]),
-        producidos: toNumber(data[4]),
-        redwood: toNumber(data[5]),
-        diferencia: toNumber(data[6])
-      };
+      const data = await apiGet("dashboard");
+      dashboardData = data.dashboard || {};
     }
 
     async function loadCRM(){
-      const res = await fetch(APPS_SCRIPT_URL + "?action=leads", {cache:"no-store"});
-      const data = await res.json();
-      crmLeads = Array.isArray(data.leads) ? data.leads : [];
+      const data = await apiGet("leads");
+      crmLeads = data.leads || [];
     }
 
     async function loadPipeline(){
-      const dt = await querySheet(GIDS.pipeline, "select * offset 3");
-      const rows = dtToRows(dt);
-
-      pipelineRows = rows
-        .filter(r => String(r[0] || "").trim() !== "")
-        .map(r => ({
-          cliente: r[0] || "",
-          contacto: r[1] || "",
-          rep: r[2] || "",
-          devices: r[3] || "",
-          monto: r[4] || "",
-          estadoVenta: r[5] || "",
-          estadoPago: r[6] || "",
-          saldo: r[7] || "",
-          entrega: r[8] || "",
-          fechaEntrega: r[9] || "",
-          ciudad: r[10] || "",
-          notas: r[11] || ""
-        }));
+      const data = await apiGet("pipeline");
+      pipelineRows = data.pipeline || [];
     }
 
     async function loadComodatos(){
-      const dt = await querySheet(GIDS.comodatos, "select * offset 3");
-      const rows = dtToRows(dt);
-
-      comodatoRows = rows
-        .filter(r => String(r[0] || "").trim() !== "")
-        .map(r => ({
-          cliente: r[0] || "",
-          contacto: r[1] || "",
-          rep: r[2] || "",
-          devices: r[3] || "",
-          estado: r[4] || "",
-          fechaEntrega: r[5] || "",
-          ciudad: r[6] || ""
-        }));
+      const data = await apiGet("comodatos");
+      comodatoRows = data.comodatos || [];
     }
 
     async function loadCobranza(){
-      const dt = await querySheet(GIDS.cobranza, "select * offset 3");
-      const rows = dtToRows(dt);
-
-      cobranzaRows = rows
-        .filter(r => {
-          const first = String(r[0] || "").trim();
-          return first !== "" && !normalize(first).includes("TOTAL");
-        })
-        .map(r => ({
-          cliente: r[0] || "",
-          rep: r[1] || "",
-          monto: r[2] || "",
-          saldo: r[3] || "",
-          estado: r[4] || "",
-          accion: r[5] || ""
-        }));
+      const data = await apiGet("cobranza");
+      cobranzaRows = data.cobranza || [];
     }
 
     async function upsertLead(lead){
-      const body = new URLSearchParams({
-        action: "lead_upsert",
+      return await apiPost({
+        action:"lead_upsert",
         id: lead.id || "",
         nombre: lead.nombre || "",
         empresa: lead.empresa || "",
@@ -567,30 +217,13 @@
         stage: lead.stage || "Nuevo",
         nextFollow: lead.nextFollow || "",
         notes: JSON.stringify(lead.notes || []),
-        createdAt: lead.createdAt || new Date().toISOString().slice(0,10),
+        createdAt: lead.createdAt || "",
         updatedAt: new Date().toISOString().slice(0,10)
       });
-
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        body
-      });
-
-      return await res.json();
     }
 
     async function deleteLeadRemote(id){
-      const body = new URLSearchParams({
-        action: "lead_delete",
-        id: id || ""
-      });
-
-      try{
-        await fetch(APPS_SCRIPT_URL, {
-          method: "POST",
-          body
-        });
-      }catch(e){}
+      return await apiPost({ action:"lead_delete", id });
     }
 
     function renderDashboard(){
@@ -599,34 +232,14 @@
           <h1>Dashboard</h1>
           <button class="btn" id="refreshBtn">↻ Actualizar</button>
         </div>
-
         <div class="kpi-row">
-          <div class="kpi">
-            <div class="kpi-val" style="color:var(--green)">${dashboardData.cerradas}</div>
-            <div class="kpi-label">Ventas Cerradas</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-val" style="color:var(--blue)">${dashboardData.incompletas}</div>
-            <div class="kpi-label">Venta Incompleta</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-val" style="color:var(--purple)">${dashboardData.comodato}</div>
-            <div class="kpi-label">En Comodato</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-val" style="color:var(--yellow)">${dashboardData.totalDevices}</div>
-            <div class="kpi-label">Total Devices</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-val" style="color:#0F172A">${dashboardData.producidos}</div>
-            <div class="kpi-label">Producidos</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-val" style="color:var(--red)">${dashboardData.redwood}</div>
-            <div class="kpi-label">Redwood</div>
-          </div>
+          <div class="kpi"><div class="kpi-val" style="color:var(--green)">${dashboardData.cerradas ?? 0}</div><div class="kpi-label">Ventas Cerradas</div></div>
+          <div class="kpi"><div class="kpi-val" style="color:var(--blue)">${dashboardData.incompletas ?? 0}</div><div class="kpi-label">Venta Incompleta</div></div>
+          <div class="kpi"><div class="kpi-val" style="color:var(--purple)">${dashboardData.prospeccion ?? 0}</div><div class="kpi-label">Prospección</div></div>
+          <div class="kpi"><div class="kpi-val" style="color:var(--yellow)">${dashboardData.comodato ?? 0}</div><div class="kpi-label">En Comodato</div></div>
+          <div class="kpi"><div class="kpi-val" style="color:#0F172A">${dashboardData.totalDevices ?? 0}</div><div class="kpi-label">Total Devices</div></div>
+          <div class="kpi"><div class="kpi-val" style="color:var(--red)">${dashboardData.redwood ?? 0}</div><div class="kpi-label">Redwood</div></div>
         </div>
-
         <div class="card">
           <div class="card-title">CRM Leads Rápido</div>
           <div class="actions">
@@ -643,25 +256,20 @@
       crmLeads.forEach(l => { if(counts[l.stage] !== undefined) counts[l.stage]++; });
 
       const filtered = crmLeads.filter(l => {
-        const stageOk = !crmStage || l.stage === crmStage;
+        const okStage = !crmStage || l.stage === crmStage;
         const q = crmSearch.trim().toLowerCase();
-        const searchOk = !q || [l.nombre, l.empresa, l.rep, l.tel, l.email].join(" ").toLowerCase().includes(q);
-        return stageOk && searchOk;
+        const okSearch = !q || [l.nombre,l.empresa,l.rep,l.tel,l.email].join(" ").toLowerCase().includes(q);
+        return okStage && okSearch;
       });
 
       const rows = filtered.map(l => `
         <tr>
-          <td>
-            <div class="strong">${l.nombre || "--"}</div>
-            <div class="muted">${l.empresa || "--"}${l.ciudad ? " · " + l.ciudad : ""}</div>
-          </td>
+          <td><div class="strong">${l.nombre || "--"}</div><div class="muted">${l.empresa || "--"}${l.ciudad ? " · " + l.ciudad : ""}</div></td>
           <td>${l.rep || "--"}</td>
           <td>${badgeForValue(l.stage || "Nuevo")}</td>
           <td>${l.nextFollow || "--"}</td>
           <td>${l.fuente || "--"}</td>
-          <td>
-            <button class="btn btn-sm openLeadBtn" data-id="${l.id}">Ver</button>
-          </td>
+          <td><button class="btn btn-sm openLeadBtn" data-id="${l.id}">Ver</button></td>
         </tr>
       `).join("");
 
@@ -673,31 +281,15 @@
             <button class="btn btn-dark" id="newLeadBtn">+ Nuevo Lead</button>
           </div>
         </div>
-
         <div class="stage-row">
           <button class="stage-pill ${crmStage === "" ? "on" : ""}" data-stage="">Todos (${crmLeads.length})</button>
           ${STAGES.map(s => `<button class="stage-pill ${crmStage === s ? "on" : ""}" data-stage="${s}">${s} (${counts[s] || 0})</button>`).join("")}
         </div>
-
-        <div class="toolbar">
-          <input class="search" id="crmSearch" placeholder="Buscar lead..." value="${crmSearch.replace(/"/g, "&quot;")}" />
-        </div>
-
+        <div class="toolbar"><input class="search" id="crmSearch" placeholder="Buscar lead..." value="${crmSearch.replace(/"/g, "&quot;")}" /></div>
         <div class="tbl-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Nombre / Empresa</th>
-                <th>Rep</th>
-                <th>Stage</th>
-                <th>Siguiente</th>
-                <th>Fuente</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows || `<tr><td colspan="6" class="empty">Sin leads disponibles.</td></tr>`}
-            </tbody>
+            <thead><tr><th>Nombre / Empresa</th><th>Rep</th><th>Stage</th><th>Siguiente</th><th>Fuente</th><th>Acción</th></tr></thead>
+            <tbody>${rows || `<tr><td colspan="6" class="empty">Sin leads disponibles.</td></tr>`}</tbody>
           </table>
         </div>
       `;
@@ -719,29 +311,11 @@
       `).join("");
 
       return `
-        <div class="topbar">
-          <h1>Pipeline</h1>
-          <button class="btn" id="refreshBtn">↻ Actualizar</button>
-        </div>
-
+        <div class="topbar"><h1>Pipeline</h1><button class="btn" id="refreshBtn">↻ Actualizar</button></div>
         <div class="tbl-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Cliente</th>
-                <th>Contacto</th>
-                <th>Rep</th>
-                <th>Devices</th>
-                <th>Status Venta</th>
-                <th>Status Pago</th>
-                <th>Saldo</th>
-                <th>Entrega</th>
-                <th>Ciudad</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows || `<tr><td colspan="9" class="empty">Sin registros.</td></tr>`}
-            </tbody>
+            <thead><tr><th>Cliente</th><th>Contacto</th><th>Rep</th><th>Devices</th><th>Status Venta</th><th>Status Pago</th><th>Saldo</th><th>Entrega</th><th>Ciudad</th></tr></thead>
+            <tbody>${rows || `<tr><td colspan="9" class="empty">Sin registros.</td></tr>`}</tbody>
           </table>
         </div>
       `;
@@ -761,27 +335,11 @@
       `).join("");
 
       return `
-        <div class="topbar">
-          <h1>Comodatos</h1>
-          <button class="btn" id="refreshBtn">↻ Actualizar</button>
-        </div>
-
+        <div class="topbar"><h1>Comodatos</h1><button class="btn" id="refreshBtn">↻ Actualizar</button></div>
         <div class="tbl-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Cliente</th>
-                <th>Contacto</th>
-                <th>Rep</th>
-                <th>Devices</th>
-                <th>Status</th>
-                <th>Entrega</th>
-                <th>Ciudad</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows || `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`}
-            </tbody>
+            <thead><tr><th>Cliente</th><th>Contacto</th><th>Rep</th><th>Devices</th><th>Status</th><th>Entrega</th><th>Ciudad</th></tr></thead>
+            <tbody>${rows || `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`}</tbody>
           </table>
         </div>
       `;
@@ -800,26 +358,11 @@
       `).join("");
 
       return `
-        <div class="topbar">
-          <h1>Cobranza</h1>
-          <button class="btn" id="refreshBtn">↻ Actualizar</button>
-        </div>
-
+        <div class="topbar"><h1>Cobranza</h1><button class="btn" id="refreshBtn">↻ Actualizar</button></div>
         <div class="tbl-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>Cliente</th>
-                <th>Rep</th>
-                <th>Monto Total</th>
-                <th>Saldo Pendiente</th>
-                <th>Status</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rows || `<tr><td colspan="6" class="empty">Sin registros.</td></tr>`}
-            </tbody>
+            <thead><tr><th>Cliente</th><th>Rep</th><th>Monto Total</th><th>Saldo Pendiente</th><th>Status</th><th>Acción</th></tr></thead>
+            <tbody>${rows || `<tr><td colspan="6" class="empty">Sin registros.</td></tr>`}</tbody>
           </table>
         </div>
       `;
@@ -827,48 +370,38 @@
 
     function render(){
       const content = document.getElementById("mainContent");
-
       if(currentTab === "dashboard") content.innerHTML = renderDashboard();
       if(currentTab === "crm") content.innerHTML = renderCRM();
       if(currentTab === "pipeline") content.innerHTML = renderPipeline();
       if(currentTab === "comodatos") content.innerHTML = renderComodatos();
       if(currentTab === "cobranza") content.innerHTML = renderCobranza();
-
       wireUI();
     }
 
     function wireUI(){
       const refreshBtn = document.getElementById("refreshBtn");
-      if(refreshBtn) refreshBtn.addEventListener("click", loadCurrentTab);
+      if(refreshBtn) refreshBtn.onclick = loadCurrentTab;
 
       document.querySelectorAll("[data-go]").forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.onclick = () => {
           currentTab = btn.dataset.go;
           setNav();
           loadCurrentTab();
-        });
+        };
       });
 
       const newLeadBtn = document.getElementById("newLeadBtn");
-      if(newLeadBtn) newLeadBtn.addEventListener("click", openNewLeadModal);
+      if(newLeadBtn) newLeadBtn.onclick = openNewLeadModal;
 
       const crmSearchEl = document.getElementById("crmSearch");
-      if(crmSearchEl){
-        crmSearchEl.addEventListener("input", e => {
-          crmSearch = e.target.value;
-          render();
-        });
-      }
+      if(crmSearchEl) crmSearchEl.oninput = e => { crmSearch = e.target.value; render(); };
 
       document.querySelectorAll(".stage-pill").forEach(btn => {
-        btn.addEventListener("click", () => {
-          crmStage = btn.dataset.stage || "";
-          render();
-        });
+        btn.onclick = () => { crmStage = btn.dataset.stage || ""; render(); };
       });
 
       document.querySelectorAll(".openLeadBtn").forEach(btn => {
-        btn.addEventListener("click", () => openLeadModal(btn.dataset.id));
+        btn.onclick = () => openLeadModal(btn.dataset.id);
       });
     }
 
@@ -876,92 +409,30 @@
       document.getElementById("modalRoot").innerHTML = "";
     }
 
-    function genId(){
-      return "lead_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
-    }
-
     function openNewLeadModal(){
       document.getElementById("modalRoot").innerHTML = `
         <div class="modal-overlay open" id="leadModalOverlay">
           <div class="modal">
-            <div class="modal-head">
-              <div class="modal-title">Nuevo Lead</div>
-              <button class="close" id="closeModalBtn">×</button>
-            </div>
-
-            <div class="form-grid">
-              <div class="fg">
-                <label>Nombre</label>
-                <input id="leadNombre" />
-              </div>
-              <div class="fg">
-                <label>Empresa</label>
-                <input id="leadEmpresa" />
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="fg">
-                <label>Rep</label>
-                <select id="leadRep">${REPS.map(r => `<option value="${r}">${r}</option>`).join("")}</select>
-              </div>
-              <div class="fg">
-                <label>Ciudad</label>
-                <input id="leadCiudad" />
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="fg">
-                <label>Teléfono</label>
-                <input id="leadTel" />
-              </div>
-              <div class="fg">
-                <label>Email</label>
-                <input id="leadEmail" />
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="fg">
-                <label>Fuente</label>
-                <select id="leadFuente">${FUENTES.map(f => `<option value="${f}">${f}</option>`).join("")}</select>
-              </div>
-              <div class="fg">
-                <label>Stage</label>
-                <select id="leadStage">${STAGES.map(s => `<option value="${s}">${s}</option>`).join("")}</select>
-              </div>
-            </div>
-
-            <div class="form-grid full">
-              <div class="fg">
-                <label>Siguiente seguimiento</label>
-                <input type="date" id="leadNextFollow" />
-              </div>
-            </div>
-
-            <div class="actions">
-              <button class="btn btn-dark" id="saveLeadBtn">Guardar Lead</button>
-              <button class="btn" id="cancelLeadBtn">Cancelar</button>
-            </div>
+            <div class="modal-head"><div class="modal-title">Nuevo Lead</div><button class="close" id="closeModalBtn">×</button></div>
+            <div class="form-grid"><div class="fg"><label>Nombre</label><input id="leadNombre" /></div><div class="fg"><label>Empresa</label><input id="leadEmpresa" /></div></div>
+            <div class="form-grid"><div class="fg"><label>Rep</label><select id="leadRep">${REPS.map(r => `<option value="${r}">${r}</option>`).join("")}</select></div><div class="fg"><label>Ciudad</label><input id="leadCiudad" /></div></div>
+            <div class="form-grid"><div class="fg"><label>Teléfono</label><input id="leadTel" /></div><div class="fg"><label>Email</label><input id="leadEmail" /></div></div>
+            <div class="form-grid"><div class="fg"><label>Fuente</label><select id="leadFuente">${FUENTES.map(f => `<option value="${f}">${f}</option>`).join("")}</select></div><div class="fg"><label>Stage</label><select id="leadStage">${STAGES.map(s => `<option value="${s}">${s}</option>`).join("")}</select></div></div>
+            <div class="form-grid full"><div class="fg"><label>Siguiente seguimiento</label><input type="date" id="leadNextFollow" /></div></div>
+            <div class="actions"><button class="btn btn-dark" id="saveLeadBtn">Guardar Lead</button><button class="btn" id="cancelLeadBtn">Cancelar</button></div>
           </div>
         </div>
       `;
 
       document.getElementById("closeModalBtn").onclick = closeModal;
       document.getElementById("cancelLeadBtn").onclick = closeModal;
-      document.getElementById("leadModalOverlay").addEventListener("click", e => {
-        if(e.target.id === "leadModalOverlay") closeModal();
-      });
+      document.getElementById("leadModalOverlay").onclick = e => { if(e.target.id === "leadModalOverlay") closeModal(); };
 
       document.getElementById("saveLeadBtn").onclick = async () => {
         const nombre = document.getElementById("leadNombre").value.trim();
-        if(!nombre){
-          toast("El nombre es obligatorio");
-          return;
-        }
+        if(!nombre){ toast("El nombre es obligatorio"); return; }
 
-        const lead = {
+        await upsertLead({
           id: genId(),
           nombre,
           empresa: document.getElementById("leadEmpresa").value.trim(),
@@ -975,18 +446,12 @@
           notes: [],
           createdAt: new Date().toISOString().slice(0,10),
           updatedAt: new Date().toISOString().slice(0,10)
-        };
+        });
 
-        try{
-          await upsertLead(lead);
-          closeModal();
-          toast("Lead guardado");
-          await loadCRM();
-          render();
-        }catch(e){
-          console.error(e);
-          toast("No se pudo guardar");
-        }
+        closeModal();
+        toast("Lead guardado");
+        await loadCRM();
+        render();
       };
     }
 
@@ -999,89 +464,31 @@
         <div class="modal-overlay open" id="leadModalOverlay">
           <div class="modal">
             <div class="modal-head">
-              <div>
-                <div class="modal-title">${lead.nombre || "Lead"}</div>
-                <div class="muted">${lead.empresa || "--"}${lead.ciudad ? " · " + lead.ciudad : ""}</div>
-              </div>
+              <div><div class="modal-title">${lead.nombre || "Lead"}</div><div class="muted">${lead.empresa || "--"}${lead.ciudad ? " · " + lead.ciudad : ""}</div></div>
               <button class="close" id="closeModalBtn">×</button>
             </div>
-
-            <div class="form-grid">
-              <div class="fg">
-                <label>Stage</label>
-                <select id="editStage">${STAGES.map(s => `<option value="${s}" ${lead.stage === s ? "selected" : ""}>${s}</option>`).join("")}</select>
-              </div>
-              <div class="fg">
-                <label>Siguiente seguimiento</label>
-                <input type="date" id="editNextFollow" value="${lead.nextFollow || ""}" />
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="fg">
-                <label>Rep</label>
-                <select id="editRep">${REPS.map(r => `<option value="${r}" ${lead.rep === r ? "selected" : ""}>${r}</option>`).join("")}</select>
-              </div>
-              <div class="fg">
-                <label>Fuente</label>
-                <select id="editFuente">${FUENTES.map(f => `<option value="${f}" ${lead.fuente === f ? "selected" : ""}>${f}</option>`).join("")}</select>
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="fg">
-                <label>Teléfono</label>
-                <input id="editTel" value="${lead.tel || ""}" />
-              </div>
-              <div class="fg">
-                <label>Email</label>
-                <input id="editEmail" value="${lead.email || ""}" />
-              </div>
-            </div>
-
-            <div class="fg" style="margin-bottom:14px">
-              <label>Nueva nota</label>
-              <textarea id="newNoteText" placeholder="Escribe una nota..."></textarea>
-            </div>
-
-            <div style="margin-bottom:16px">
-              <div class="card-title" style="font-size:14px;margin-bottom:10px">Historial</div>
-              ${notes.length ? notes.slice().reverse().map(n => `
-                <div class="note">
-                  <div>${n.text || ""}</div>
-                  <div class="note-meta">${n.rep || "Yo"} · ${n.date || ""}</div>
-                </div>
-              `).join("") : `<div class="empty">Sin notas.</div>`}
-            </div>
-
-            <div class="actions">
-              <button class="btn btn-dark" id="saveLeadEditBtn">Guardar cambios</button>
-              <button class="btn" id="deleteLeadBtn">Eliminar</button>
-              <button class="btn" id="cancelLeadBtn">Cerrar</button>
-            </div>
+            <div class="form-grid"><div class="fg"><label>Stage</label><select id="editStage">${STAGES.map(s => `<option value="${s}" ${lead.stage === s ? "selected" : ""}>${s}</option>`).join("")}</select></div><div class="fg"><label>Siguiente seguimiento</label><input type="date" id="editNextFollow" value="${lead.nextFollow || ""}" /></div></div>
+            <div class="form-grid"><div class="fg"><label>Rep</label><select id="editRep">${REPS.map(r => `<option value="${r}" ${lead.rep === r ? "selected" : ""}>${r}</option>`).join("")}</select></div><div class="fg"><label>Fuente</label><select id="editFuente">${FUENTES.map(f => `<option value="${f}" ${lead.fuente === f ? "selected" : ""}>${f}</option>`).join("")}</select></div></div>
+            <div class="form-grid"><div class="fg"><label>Teléfono</label><input id="editTel" value="${lead.tel || ""}" /></div><div class="fg"><label>Email</label><input id="editEmail" value="${lead.email || ""}" /></div></div>
+            <div class="fg" style="margin-bottom:14px"><label>Nueva nota</label><textarea id="newNoteText" placeholder="Escribe una nota..."></textarea></div>
+            <div style="margin-bottom:16px"><div class="card-title" style="font-size:14px;margin-bottom:10px">Historial</div>${notes.length ? notes.slice().reverse().map(n => `<div class="note"><div>${n.text || ""}</div><div class="note-meta">${n.rep || "Yo"} · ${n.date || ""}</div></div>`).join("") : `<div class="empty">Sin notas.</div>`}</div>
+            <div class="actions"><button class="btn btn-dark" id="saveLeadEditBtn">Guardar cambios</button><button class="btn" id="deleteLeadBtn">Eliminar</button><button class="btn" id="cancelLeadBtn">Cerrar</button></div>
           </div>
         </div>
       `;
 
       document.getElementById("closeModalBtn").onclick = closeModal;
       document.getElementById("cancelLeadBtn").onclick = closeModal;
-      document.getElementById("leadModalOverlay").addEventListener("click", e => {
-        if(e.target.id === "leadModalOverlay") closeModal();
-      });
+      document.getElementById("leadModalOverlay").onclick = e => { if(e.target.id === "leadModalOverlay") closeModal(); };
 
       document.getElementById("saveLeadEditBtn").onclick = async () => {
-        const noteText = document.getElementById("newNoteText").value.trim();
         const updatedNotes = Array.isArray(lead.notes) ? [...lead.notes] : [];
-
+        const noteText = document.getElementById("newNoteText").value.trim();
         if(noteText){
-          updatedNotes.push({
-            text: noteText,
-            rep: "Yo",
-            date: new Date().toISOString().slice(0,10)
-          });
+          updatedNotes.push({ text: noteText, rep: "Yo", date: new Date().toISOString().slice(0,10) });
         }
 
-        const updatedLead = {
+        await upsertLead({
           ...lead,
           rep: document.getElementById("editRep").value,
           fuente: document.getElementById("editFuente").value,
@@ -1091,77 +498,52 @@
           email: document.getElementById("editEmail").value.trim(),
           notes: updatedNotes,
           updatedAt: new Date().toISOString().slice(0,10)
-        };
+        });
 
-        try{
-          await upsertLead(updatedLead);
-          closeModal();
-          toast("Lead actualizado");
-          await loadCRM();
-          render();
-        }catch(e){
-          console.error(e);
-          toast("No se pudo actualizar");
-        }
+        closeModal();
+        toast("Lead actualizado");
+        await loadCRM();
+        render();
       };
 
       document.getElementById("deleteLeadBtn").onclick = async () => {
         if(!confirm("¿Eliminar este lead?")) return;
-        try{
-          await deleteLeadRemote(lead.id);
-          closeModal();
-          toast("Lead eliminado");
-          await loadCRM();
-          render();
-        }catch(e){
-          console.error(e);
-          toast("No se pudo eliminar");
-        }
+        await deleteLeadRemote(lead.id);
+        closeModal();
+        toast("Lead eliminado");
+        await loadCRM();
+        render();
       };
+    }
+
+    function genId(){
+      return "lead_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
     }
 
     async function loadCurrentTab(){
       try{
-        if(currentTab === "dashboard"){
-          showLoading("Dashboard");
-          await loadDashboard();
-        }
-        if(currentTab === "crm"){
-          showLoading("CRM Leads");
-          await loadCRM();
-        }
-        if(currentTab === "pipeline"){
-          showLoading("Pipeline");
-          await loadPipeline();
-        }
-        if(currentTab === "comodatos"){
-          showLoading("Comodatos");
-          await loadComodatos();
-        }
-        if(currentTab === "cobranza"){
-          showLoading("Cobranza");
-          await loadCobranza();
-        }
-
+        if(currentTab === "dashboard"){ showLoading("Dashboard"); await loadDashboard(); }
+        if(currentTab === "crm"){ showLoading("CRM Leads"); await loadCRM(); }
+        if(currentTab === "pipeline"){ showLoading("Pipeline"); await loadPipeline(); }
+        if(currentTab === "comodatos"){ showLoading("Comodatos"); await loadComodatos(); }
+        if(currentTab === "cobranza"){ showLoading("Cobranza"); await loadCobranza(); }
         render();
       }catch(e){
         console.error(e);
-        showError("No se pudo cargar la información. Recarga la página.");
+        showError("No se pudo cargar la información. Revisa la URL del Apps Script.");
       }
     }
 
     document.querySelectorAll(".nav-tab").forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.onclick = () => {
         currentTab = btn.dataset.tab;
         setNav();
         loadCurrentTab();
-      });
+      };
     });
 
-    google.charts.setOnLoadCallback(() => {
-      setNav();
-      loadCurrentTab();
-    });
+    setNav();
+    loadCurrentTab();
   </script>
 </body>
 </html>
