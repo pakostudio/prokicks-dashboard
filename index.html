@@ -1,104 +1,728 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRO KICKS CRM</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRO KICKS CRM</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --panel-2:#f8fafc;
+      --border:#e5e7eb;
+      --text:#0f172a;
+      --muted:#64748b;
+      --navy:#0b1730;
+      --navy-2:#12213f;
+      --green:#16a34a;
+      --green-bg:#dcfce7;
+      --yellow:#ca8a04;
+      --yellow-bg:#fef9c3;
+      --red:#dc2626;
+      --red-bg:#fee2e2;
+      --blue:#2563eb;
+      --blue-bg:#dbeafe;
+      --purple:#7c3aed;
+      --purple-bg:#ede9fe;
+      --shadow:0 10px 30px rgba(15,23,42,.08);
+      --radius:18px;
+    }
 
-<style>
-body{font-family:Arial;background:#f5f5f5;padding:20px}
-h1{margin-bottom:20px}
-button{padding:8px 12px;margin-right:10px;cursor:pointer}
-table{width:100%;border-collapse:collapse;margin-top:20px;background:#fff}
-th,td{padding:10px;border:1px solid #ddd;text-align:left}
-th{background:#eee}
-</style>
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+      color:var(--text);
+    }
+
+    .shell{
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero{
+      background: linear-gradient(135deg, var(--navy) 0%, #1d355f 100%);
+      color:#fff;
+      border-radius: 24px;
+      padding: 28px 28px 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+
+    .hero-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .eyebrow{
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      opacity:.75;
+    }
+
+    .title{
+      font-size: clamp(32px, 4vw, 58px);
+      line-height: .95;
+      font-weight: 900;
+      margin:0;
+    }
+
+    .subtitle{
+      font-size:15px;
+      color:rgba(255,255,255,.8);
+      margin:0;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size:14px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .btn-primary{
+      background:#fff;
+      color:var(--navy);
+    }
+
+    .btn-primary:hover{transform:translateY(-1px)}
+    .btn-secondary{
+      background:rgba(255,255,255,.1);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+    }
+
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .tab{
+      border:none;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.82);
+      padding:11px 14px;
+      border-radius: 12px;
+      font-size:14px;
+      font-weight:800;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .tab.active{
+      background:#fff;
+      color:var(--navy);
+    }
+
+    .grid-kpis{
+      display:grid;
+      grid-template-columns:repeat(6, minmax(0,1fr));
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+
+    .kpi{
+      padding:18px;
+      min-height:128px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:10px;
+    }
+
+    .kpi-label{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .kpi-value{
+      font-size:38px;
+      line-height:1;
+      font-weight:900;
+    }
+
+    .section{
+      padding:20px;
+    }
+
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .section-title{
+      margin:0;
+      font-size:28px;
+      line-height:1;
+      font-weight:900;
+    }
+
+    .section-subtitle{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .meta-pill{
+      background:var(--panel-2);
+      border:1px solid var(--border);
+      color:var(--muted);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+    }
+
+    table{
+      width:100%;
+      min-width:980px;
+      border-collapse:collapse;
+    }
+
+    th{
+      text-align:left;
+      padding:14px 16px;
+      background:#f8fafc;
+      border-bottom:1px solid var(--border);
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+
+    td{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      font-size:15px;
+      vertical-align:middle;
+    }
+
+    tr:hover td{
+      background:#fafcff;
+    }
+
+    tr:last-child td{
+      border-bottom:none;
+    }
+
+    .name{
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+      border-radius:999px;
+      padding:7px 11px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.01em;
+    }
+
+    .b-green{background:var(--green-bg); color:var(--green)}
+    .b-yellow{background:var(--yellow-bg); color:var(--yellow)}
+    .b-red{background:var(--red-bg); color:var(--red)}
+    .b-blue{background:var(--blue-bg); color:var(--blue)}
+    .b-purple{background:var(--purple-bg); color:var(--purple)}
+
+    .empty{
+      padding:30px;
+      text-align:center;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .leads-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .lead-card{
+      padding:18px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+      box-shadow:var(--shadow);
+    }
+
+    .lead-name{
+      font-size:20px;
+      font-weight:900;
+      margin:0 0 6px;
+    }
+
+    .lead-company{
+      color:var(--muted);
+      margin:0 0 14px;
+      font-size:14px;
+    }
+
+    .lead-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .lead-meta div{
+      background:var(--panel-2);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:10px;
+      font-size:13px;
+    }
+
+    .lead-meta strong{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:6px;
+    }
+
+    .footer-note{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      margin-top:18px;
+    }
+
+    @media (max-width: 1200px){
+      .grid-kpis{grid-template-columns:repeat(3, minmax(0,1fr))}
+      .leads-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media (max-width: 760px){
+      .shell{padding:14px}
+      .hero{padding:20px 18px}
+      .grid-kpis{grid-template-columns:repeat(2, minmax(0,1fr))}
+      .leads-grid{grid-template-columns:1fr}
+      .section-title{font-size:22px}
+      .kpi-value{font-size:32px}
+    }
+
+    @media (max-width: 520px){
+      .grid-kpis{grid-template-columns:1fr}
+      .hero-actions{width:100%}
+      .btn{width:100%}
+      .tab{flex:1}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="shell">
+    <section class="hero">
+      <div class="hero-top">
+        <div class="brand">
+          <div class="eyebrow">Sales Dashboard</div>
+          <h1 class="title">PRO KICKS CRM</h1>
+          <p class="subtitle">Pipeline comercial, comodatos, cobranza y leads conectados en tiempo real.</p>
+        </div>
 
-<h1>PRO KICKS CRM</h1>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="load()">Actualizar</button>
+          <button class="btn btn-secondary" onclick="setTab('dashboard')">Ver dashboard</button>
+        </div>
+      </div>
 
-<div>
-  <button onclick="tab='pipeline';render()">Pipeline</button>
-  <button onclick="tab='comodatos';render()">Comodatos</button>
-  <button onclick="tab='cobranza';render()">Cobranza</button>
-</div>
+      <div class="tabs">
+        <button class="tab active" data-tab="dashboard" onclick="setTab('dashboard')">Dashboard</button>
+        <button class="tab" data-tab="pipeline" onclick="setTab('pipeline')">Pipeline</button>
+        <button class="tab" data-tab="comodatos" onclick="setTab('comodatos')">Comodatos</button>
+        <button class="tab" data-tab="cobranza" onclick="setTab('cobranza')">Cobranza</button>
+        <button class="tab" data-tab="leads" onclick="setTab('leads')">Leads</button>
+      </div>
+    </section>
 
-<div id="app">Cargando...</div>
+    <div id="app">
+      <div class="card section">Cargando...</div>
+    </div>
 
-<script>
+    <div class="footer-note">PRO KICKS CRM · Conectado a Google Sheets vía Apps Script</div>
+  </div>
 
-const API = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
+  <script>
+    const API = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
 
-let data = {};
-let tab = "pipeline";
+    let data = {};
+    let tab = "dashboard";
 
-async function load(){
-  const res = await fetch(API);
-  data = await res.json();
-  render();
-}
+    async function load(){
+      const app = document.getElementById("app");
+      app.innerHTML = `<div class="card section">Cargando información...</div>`;
 
-function render(){
-  const el = document.getElementById("app");
+      try{
+        const res = await fetch(API, { cache: "no-store" });
+        data = await res.json();
+        render();
+      }catch(error){
+        app.innerHTML = `<div class="card section"><div class="empty">No se pudo cargar la información.</div></div>`;
+      }
+    }
 
-  if(tab==="pipeline"){
-    el.innerHTML = `
-      <h2>Pipeline</h2>
-      <table>
-        <tr><th>Cliente</th><th>Rep</th><th>Devices</th><th>Venta</th><th>Pago</th><th>Saldo</th><th>Ciudad</th></tr>
-        ${data.pipeline.map(r=>`
-          <tr>
-            <td>${r.cliente}</td>
-            <td>${r.rep}</td>
-            <td>${r.devices}</td>
-            <td>${r.estadoVenta}</td>
-            <td>${r.estadoPago}</td>
-            <td>${r.saldo}</td>
-            <td>${r.ciudad}</td>
-          </tr>
-        `).join("")}
-      </table>`;
-  }
+    function setTab(nextTab){
+      tab = nextTab;
+      document.querySelectorAll(".tab").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === tab);
+      });
+      render();
+    }
 
-  if(tab==="comodatos"){
-    el.innerHTML = `
-      <h2>Comodatos</h2>
-      <table>
-        <tr><th>Cliente</th><th>Rep</th><th>Devices</th><th>Status</th><th>Ciudad</th></tr>
-        ${data.comodatos.map(r=>`
-          <tr>
-            <td>${r.cliente}</td>
-            <td>${r.rep}</td>
-            <td>${r.devices}</td>
-            <td>${r.estado}</td>
-            <td>${r.ciudad}</td>
-          </tr>
-        `).join("")}
-      </table>`;
-  }
+    function badge(value){
+      const v = String(value || "").toUpperCase().trim();
 
-  if(tab==="cobranza"){
-    el.innerHTML = `
-      <h2>Cobranza</h2>
-      <table>
-        <tr><th>Cliente</th><th>Rep</th><th>Saldo</th><th>Status</th></tr>
-        ${data.cobranza.map(r=>`
-          <tr>
-            <td>${r.cliente}</td>
-            <td>${r.rep}</td>
-            <td>${r.saldo}</td>
-            <td>${r.estado}</td>
-          </tr>
-        `).join("")}
-      </table>`;
-  }
-}
+      if (v.includes("PAGADO") || v.includes("CERRADA") || v.includes("EN USO")) {
+        return `<span class="badge b-green">${value || "--"}</span>`;
+      }
 
-load();
+      if (v.includes("PENDIENTE")) {
+        return `<span class="badge b-yellow">${value || "--"}</span>`;
+      }
 
-</script>
+      if (v.includes("PROSPECCIÓN") || v.includes("PROSPECCION")) {
+        return `<span class="badge b-purple">${value || "--"}</span>`;
+      }
 
+      if (v.includes("INCOMPLETA")) {
+        return `<span class="badge b-blue">${value || "--"}</span>`;
+      }
+
+      if (v.includes("PERDIDO")) {
+        return `<span class="badge b-red">${value || "--"}</span>`;
+      }
+
+      return `<span class="badge b-blue">${value || "--"}</span>`;
+    }
+
+    function safeArray(x){
+      return Array.isArray(x) ? x : [];
+    }
+
+    function cleanLeads(leads){
+      return safeArray(leads).filter(l => {
+        const id = String(l.id || "").trim();
+        const nombre = String(l.nombre || "").trim();
+        const empresa = String(l.empresa || "").trim();
+        return id || nombre || empresa;
+      });
+    }
+
+    function renderDashboard(){
+      const d = data.dashboard || {};
+      const pipeline = safeArray(data.pipeline);
+      const comodatos = safeArray(data.comodatos);
+      const cobranza = safeArray(data.cobranza);
+      const leads = cleanLeads(data.leads);
+
+      return `
+        <div class="grid-kpis">
+          <div class="card kpi">
+            <div class="kpi-label">Ventas cerradas</div>
+            <div class="kpi-value">${d.cerradas ?? 0}</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">Ventas incompletas</div>
+            <div class="kpi-value">${d.incompletas ?? 0}</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">Prospección</div>
+            <div class="kpi-value">${d.prospeccion ?? 0}</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">En comodato</div>
+            <div class="kpi-value">${d.comodato ?? 0}</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">Total devices</div>
+            <div class="kpi-value">${d.totalDevices ?? 0}</div>
+          </div>
+          <div class="card kpi">
+            <div class="kpi-label">Redwood</div>
+            <div class="kpi-value">${d.redwood ?? 0}</div>
+          </div>
+        </div>
+
+        <div class="card section">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Resumen ejecutivo</h2>
+              <p class="section-subtitle">Lectura rápida de la operación comercial actual.</p>
+            </div>
+            <div class="meta-pill">Leads: ${leads.length} · Pipeline: ${pipeline.length} · Comodatos: ${comodatos.length} · Cobranza: ${cobranza.length}</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Métrica</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="name">Ventas cerradas</td><td>${d.cerradas ?? 0}</td></tr>
+                <tr><td class="name">Ventas incompletas</td><td>${d.incompletas ?? 0}</td></tr>
+                <tr><td class="name">Prospección</td><td>${d.prospeccion ?? 0}</td></tr>
+                <tr><td class="name">Comodato</td><td>${d.comodato ?? 0}</td></tr>
+                <tr><td class="name">Total devices</td><td>${d.totalDevices ?? 0}</td></tr>
+                <tr><td class="name">Producidos</td><td>${d.producidos ?? 0}</td></tr>
+                <tr><td class="name">Redwood</td><td>${d.redwood ?? 0}</td></tr>
+                <tr><td class="name">Diferencia</td><td>${d.diferencia ?? 0}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPipeline(){
+      const rows = safeArray(data.pipeline);
+
+      return `
+        <div class="card section">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Pipeline</h2>
+              <p class="section-subtitle">Seguimiento de oportunidades comerciales, venta y cobro.</p>
+            </div>
+            <div class="meta-pill">${rows.length} registros</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Rep</th>
+                  <th>Devices</th>
+                  <th>Status venta</th>
+                  <th>Status pago</th>
+                  <th>Saldo</th>
+                  <th>Ciudad</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  rows.length
+                  ? rows.map(r => `
+                    <tr>
+                      <td class="name">${r.cliente || "--"}</td>
+                      <td>${r.rep || "--"}</td>
+                      <td>${r.devices || "--"}</td>
+                      <td>${badge(r.estadoVenta || "--")}</td>
+                      <td>${badge(r.estadoPago || "--")}</td>
+                      <td>${r.saldo || "--"}</td>
+                      <td>${r.ciudad || "--"}</td>
+                    </tr>
+                  `).join("")
+                  : `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderComodatos(){
+      const rows = safeArray(data.comodatos);
+
+      return `
+        <div class="card section">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Comodatos</h2>
+              <p class="section-subtitle">Control de equipos colocados y estatus de uso.</p>
+            </div>
+            <div class="meta-pill">${rows.length} registros</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Rep</th>
+                  <th>Devices</th>
+                  <th>Status</th>
+                  <th>Ciudad</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  rows.length
+                  ? rows.map(r => `
+                    <tr>
+                      <td class="name">${r.cliente || "--"}</td>
+                      <td>${r.rep || "--"}</td>
+                      <td>${r.devices || "--"}</td>
+                      <td>${badge(r.estado || "--")}</td>
+                      <td>${r.ciudad || "--"}</td>
+                    </tr>
+                  `).join("")
+                  : `<tr><td colspan="5" class="empty">Sin registros.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCobranza(){
+      const rows = safeArray(data.cobranza);
+
+      return `
+        <div class="card section">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Cobranza</h2>
+              <p class="section-subtitle">Visibilidad de saldos y cuentas pendientes de cobro.</p>
+            </div>
+            <div class="meta-pill">${rows.length} registros</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Rep</th>
+                  <th>Saldo</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  rows.length
+                  ? rows.map(r => `
+                    <tr>
+                      <td class="name">${r.cliente || "--"}</td>
+                      <td>${r.rep || "--"}</td>
+                      <td>${r.saldo || "--"}</td>
+                      <td>${badge(r.estado || "--")}</td>
+                    </tr>
+                  `).join("")
+                  : `<tr><td colspan="4" class="empty">Sin registros.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderLeads(){
+      const rows = cleanLeads(data.leads);
+
+      return `
+        <div class="card section">
+          <div class="section-head">
+            <div>
+              <h2 class="section-title">Leads</h2>
+              <p class="section-subtitle">Vista rápida de leads actuales registrados en la hoja.</p>
+            </div>
+            <div class="meta-pill">${rows.length} registros</div>
+          </div>
+
+          ${
+            rows.length
+            ? `<div class="leads-grid">
+                ${rows.map(l => `
+                  <div class="lead-card">
+                    <h3 class="lead-name">${l.nombre || "Sin nombre"}</h3>
+                    <p class="lead-company">${l.empresa || "Sin empresa"}</p>
+
+                    <div class="lead-meta">
+                      <div><strong>Rep</strong>${l.rep || "--"}</div>
+                      <div><strong>Stage</strong>${l.stage || "--"}</div>
+                      <div><strong>Ciudad</strong>${l.ciudad || "--"}</div>
+                      <div><strong>Fuente</strong>${l.fuente || "--"}</div>
+                      <div><strong>Tel</strong>${l.tel || "--"}</div>
+                      <div><strong>Email</strong>${l.email || "--"}</div>
+                    </div>
+                  </div>
+                `).join("")}
+              </div>`
+            : `<div class="empty">Sin leads visibles.</div>`
+          }
+        </div>
+      `;
+    }
+
+    function render(){
+      const app = document.getElementById("app");
+
+      if(!data || !data.ok){
+        app.innerHTML = `<div class="card section"><div class="empty">Sin información disponible.</div></div>`;
+        return;
+      }
+
+      if(tab === "dashboard") app.innerHTML = renderDashboard();
+      if(tab === "pipeline") app.innerHTML = renderPipeline();
+      if(tab === "comodatos") app.innerHTML = renderComodatos();
+      if(tab === "cobranza") app.innerHTML = renderCobranza();
+      if(tab === "leads") app.innerHTML = renderLeads();
+    }
+
+    load();
+  </script>
 </body>
 </html>
