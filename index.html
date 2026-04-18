@@ -134,7 +134,11 @@
     }
 
     function toNumber(v){
-      const s = String(v || "").replace(/\$/g,"").replace(/\s/g,"").replace(/\.(?=\d{3})/g,"").replace(/,/g,".");
+      const s = String(v || "")
+        .replace(/\$/g,"")
+        .replace(/\s/g,"")
+        .replace(/\.(?=\d{3})/g,"")
+        .replace(/,/g,".");
       return Number(s) || 0;
     }
 
@@ -160,47 +164,35 @@
     }
 
     function showLoading(title){
-      document.getElementById("mainContent").innerHTML = `<div class="topbar"><h1>${title}</h1></div><div class="loader">Cargando información...</div>`;
+      document.getElementById("mainContent").innerHTML =
+        `<div class="topbar"><h1>${title}</h1></div><div class="loader">Cargando información...</div>`;
     }
 
     function showError(msg){
-      document.getElementById("mainContent").innerHTML = `<div class="topbar"><h1>Error</h1></div><div class="error">${msg}</div>`;
+      document.getElementById("mainContent").innerHTML =
+        `<div class="topbar"><h1>Error</h1></div><div class="error">${msg}</div>`;
     }
 
-    async function apiGet(action){
-      const res = await fetch(APPS_SCRIPT_URL + "?action=" + encodeURIComponent(action), {cache:"no-store"});
+    async function apiGetAll(){
+      const res = await fetch(APPS_SCRIPT_URL, { cache:"no-store" });
+      if (!res.ok) throw new Error("La URL del Apps Script no respondió correctamente");
       return await res.json();
     }
 
     async function apiPost(data){
       const body = new URLSearchParams(data);
       const res = await fetch(APPS_SCRIPT_URL, { method:"POST", body });
+      if (!res.ok) throw new Error("No se pudo guardar en Apps Script");
       return await res.json();
     }
 
-    async function loadDashboard(){
-      const data = await apiGet("dashboard");
+    async function loadAllData(){
+      const data = await apiGetAll();
       dashboardData = data.dashboard || {};
-    }
-
-    async function loadCRM(){
-      const data = await apiGet("leads");
-      crmLeads = data.leads || [];
-    }
-
-    async function loadPipeline(){
-      const data = await apiGet("pipeline");
-      pipelineRows = data.pipeline || [];
-    }
-
-    async function loadComodatos(){
-      const data = await apiGet("comodatos");
-      comodatoRows = data.comodatos || [];
-    }
-
-    async function loadCobranza(){
-      const data = await apiGet("cobranza");
-      cobranzaRows = data.cobranza || [];
+      crmLeads = Array.isArray(data.leads) ? data.leads : [];
+      pipelineRows = Array.isArray(data.pipeline) ? data.pipeline : [];
+      comodatoRows = Array.isArray(data.comodatos) ? data.comodatos : [];
+      cobranzaRows = Array.isArray(data.cobranza) ? data.cobranza : [];
     }
 
     async function upsertLead(lead){
@@ -253,7 +245,9 @@
     function renderCRM(){
       const counts = {};
       STAGES.forEach(s => counts[s] = 0);
-      crmLeads.forEach(l => { if(counts[l.stage] !== undefined) counts[l.stage]++; });
+      crmLeads.forEach(l => {
+        if (counts[l.stage] !== undefined) counts[l.stage]++;
+      });
 
       const filtered = crmLeads.filter(l => {
         const okStage = !crmStage || l.stage === crmStage;
@@ -285,10 +279,21 @@
           <button class="stage-pill ${crmStage === "" ? "on" : ""}" data-stage="">Todos (${crmLeads.length})</button>
           ${STAGES.map(s => `<button class="stage-pill ${crmStage === s ? "on" : ""}" data-stage="${s}">${s} (${counts[s] || 0})</button>`).join("")}
         </div>
-        <div class="toolbar"><input class="search" id="crmSearch" placeholder="Buscar lead..." value="${crmSearch.replace(/"/g, "&quot;")}" /></div>
+        <div class="toolbar">
+          <input class="search" id="crmSearch" placeholder="Buscar lead..." value="${crmSearch.replace(/"/g, "&quot;")}" />
+        </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Nombre / Empresa</th><th>Rep</th><th>Stage</th><th>Siguiente</th><th>Fuente</th><th>Acción</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Nombre / Empresa</th>
+                <th>Rep</th>
+                <th>Stage</th>
+                <th>Siguiente</th>
+                <th>Fuente</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
             <tbody>${rows || `<tr><td colspan="6" class="empty">Sin leads disponibles.</td></tr>`}</tbody>
           </table>
         </div>
@@ -311,10 +316,25 @@
       `).join("");
 
       return `
-        <div class="topbar"><h1>Pipeline</h1><button class="btn" id="refreshBtn">↻ Actualizar</button></div>
+        <div class="topbar">
+          <h1>Pipeline</h1>
+          <button class="btn" id="refreshBtn">↻ Actualizar</button>
+        </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Cliente</th><th>Contacto</th><th>Rep</th><th>Devices</th><th>Status Venta</th><th>Status Pago</th><th>Saldo</th><th>Entrega</th><th>Ciudad</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Contacto</th>
+                <th>Rep</th>
+                <th>Devices</th>
+                <th>Status Venta</th>
+                <th>Status Pago</th>
+                <th>Saldo</th>
+                <th>Entrega</th>
+                <th>Ciudad</th>
+              </tr>
+            </thead>
             <tbody>${rows || `<tr><td colspan="9" class="empty">Sin registros.</td></tr>`}</tbody>
           </table>
         </div>
@@ -335,10 +355,23 @@
       `).join("");
 
       return `
-        <div class="topbar"><h1>Comodatos</h1><button class="btn" id="refreshBtn">↻ Actualizar</button></div>
+        <div class="topbar">
+          <h1>Comodatos</h1>
+          <button class="btn" id="refreshBtn">↻ Actualizar</button>
+        </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Cliente</th><th>Contacto</th><th>Rep</th><th>Devices</th><th>Status</th><th>Entrega</th><th>Ciudad</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Contacto</th>
+                <th>Rep</th>
+                <th>Devices</th>
+                <th>Status</th>
+                <th>Entrega</th>
+                <th>Ciudad</th>
+              </tr>
+            </thead>
             <tbody>${rows || `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`}</tbody>
           </table>
         </div>
@@ -358,10 +391,22 @@
       `).join("");
 
       return `
-        <div class="topbar"><h1>Cobranza</h1><button class="btn" id="refreshBtn">↻ Actualizar</button></div>
+        <div class="topbar">
+          <h1>Cobranza</h1>
+          <button class="btn" id="refreshBtn">↻ Actualizar</button>
+        </div>
         <div class="tbl-wrap">
           <table>
-            <thead><tr><th>Cliente</th><th>Rep</th><th>Monto Total</th><th>Saldo Pendiente</th><th>Status</th><th>Acción</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Rep</th>
+                <th>Monto Total</th>
+                <th>Saldo Pendiente</th>
+                <th>Status</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
             <tbody>${rows || `<tr><td colspan="6" class="empty">Sin registros.</td></tr>`}</tbody>
           </table>
         </div>
@@ -394,10 +439,16 @@
       if(newLeadBtn) newLeadBtn.onclick = openNewLeadModal;
 
       const crmSearchEl = document.getElementById("crmSearch");
-      if(crmSearchEl) crmSearchEl.oninput = e => { crmSearch = e.target.value; render(); };
+      if(crmSearchEl) crmSearchEl.oninput = e => {
+        crmSearch = e.target.value;
+        render();
+      };
 
       document.querySelectorAll(".stage-pill").forEach(btn => {
-        btn.onclick = () => { crmStage = btn.dataset.stage || ""; render(); };
+        btn.onclick = () => {
+          crmStage = btn.dataset.stage || "";
+          render();
+        };
       });
 
       document.querySelectorAll(".openLeadBtn").forEach(btn => {
@@ -413,45 +464,75 @@
       document.getElementById("modalRoot").innerHTML = `
         <div class="modal-overlay open" id="leadModalOverlay">
           <div class="modal">
-            <div class="modal-head"><div class="modal-title">Nuevo Lead</div><button class="close" id="closeModalBtn">×</button></div>
-            <div class="form-grid"><div class="fg"><label>Nombre</label><input id="leadNombre" /></div><div class="fg"><label>Empresa</label><input id="leadEmpresa" /></div></div>
-            <div class="form-grid"><div class="fg"><label>Rep</label><select id="leadRep">${REPS.map(r => `<option value="${r}">${r}</option>`).join("")}</select></div><div class="fg"><label>Ciudad</label><input id="leadCiudad" /></div></div>
-            <div class="form-grid"><div class="fg"><label>Teléfono</label><input id="leadTel" /></div><div class="fg"><label>Email</label><input id="leadEmail" /></div></div>
-            <div class="form-grid"><div class="fg"><label>Fuente</label><select id="leadFuente">${FUENTES.map(f => `<option value="${f}">${f}</option>`).join("")}</select></div><div class="fg"><label>Stage</label><select id="leadStage">${STAGES.map(s => `<option value="${s}">${s}</option>`).join("")}</select></div></div>
-            <div class="form-grid full"><div class="fg"><label>Siguiente seguimiento</label><input type="date" id="leadNextFollow" /></div></div>
-            <div class="actions"><button class="btn btn-dark" id="saveLeadBtn">Guardar Lead</button><button class="btn" id="cancelLeadBtn">Cancelar</button></div>
+            <div class="modal-head">
+              <div class="modal-title">Nuevo Lead</div>
+              <button class="close" id="closeModalBtn">×</button>
+            </div>
+            <div class="form-grid">
+              <div class="fg"><label>Nombre</label><input id="leadNombre" /></div>
+              <div class="fg"><label>Empresa</label><input id="leadEmpresa" /></div>
+            </div>
+            <div class="form-grid">
+              <div class="fg"><label>Rep</label><select id="leadRep">${REPS.map(r => `<option value="${r}">${r}</option>`).join("")}</select></div>
+              <div class="fg"><label>Ciudad</label><input id="leadCiudad" /></div>
+            </div>
+            <div class="form-grid">
+              <div class="fg"><label>Teléfono</label><input id="leadTel" /></div>
+              <div class="fg"><label>Email</label><input id="leadEmail" /></div>
+            </div>
+            <div class="form-grid">
+              <div class="fg"><label>Fuente</label><select id="leadFuente">${FUENTES.map(f => `<option value="${f}">${f}</option>`).join("")}</select></div>
+              <div class="fg"><label>Stage</label><select id="leadStage">${STAGES.map(s => `<option value="${s}">${s}</option>`).join("")}</select></div>
+            </div>
+            <div class="form-grid full">
+              <div class="fg"><label>Siguiente seguimiento</label><input type="date" id="leadNextFollow" /></div>
+            </div>
+            <div class="actions">
+              <button class="btn btn-dark" id="saveLeadBtn">Guardar Lead</button>
+              <button class="btn" id="cancelLeadBtn">Cancelar</button>
+            </div>
           </div>
         </div>
       `;
 
       document.getElementById("closeModalBtn").onclick = closeModal;
       document.getElementById("cancelLeadBtn").onclick = closeModal;
-      document.getElementById("leadModalOverlay").onclick = e => { if(e.target.id === "leadModalOverlay") closeModal(); };
+      document.getElementById("leadModalOverlay").onclick = e => {
+        if(e.target.id === "leadModalOverlay") closeModal();
+      };
 
       document.getElementById("saveLeadBtn").onclick = async () => {
         const nombre = document.getElementById("leadNombre").value.trim();
-        if(!nombre){ toast("El nombre es obligatorio"); return; }
+        if(!nombre){
+          toast("El nombre es obligatorio");
+          return;
+        }
 
-        await upsertLead({
-          id: genId(),
-          nombre,
-          empresa: document.getElementById("leadEmpresa").value.trim(),
-          rep: document.getElementById("leadRep").value,
-          ciudad: document.getElementById("leadCiudad").value.trim(),
-          tel: document.getElementById("leadTel").value.trim(),
-          email: document.getElementById("leadEmail").value.trim(),
-          fuente: document.getElementById("leadFuente").value,
-          stage: document.getElementById("leadStage").value,
-          nextFollow: document.getElementById("leadNextFollow").value,
-          notes: [],
-          createdAt: new Date().toISOString().slice(0,10),
-          updatedAt: new Date().toISOString().slice(0,10)
-        });
+        try{
+          await upsertLead({
+            id: genId(),
+            nombre,
+            empresa: document.getElementById("leadEmpresa").value.trim(),
+            rep: document.getElementById("leadRep").value,
+            ciudad: document.getElementById("leadCiudad").value.trim(),
+            tel: document.getElementById("leadTel").value.trim(),
+            email: document.getElementById("leadEmail").value.trim(),
+            fuente: document.getElementById("leadFuente").value,
+            stage: document.getElementById("leadStage").value,
+            nextFollow: document.getElementById("leadNextFollow").value,
+            notes: [],
+            createdAt: new Date().toISOString().slice(0,10),
+            updatedAt: new Date().toISOString().slice(0,10)
+          });
 
-        closeModal();
-        toast("Lead guardado");
-        await loadCRM();
-        render();
+          closeModal();
+          toast("Lead guardado");
+          await loadAllData();
+          render();
+        }catch(err){
+          console.error(err);
+          toast("No se pudo guardar el lead");
+        }
       };
     }
 
@@ -460,59 +541,102 @@
       if(!lead) return;
 
       const notes = Array.isArray(lead.notes) ? lead.notes : [];
+
       document.getElementById("modalRoot").innerHTML = `
         <div class="modal-overlay open" id="leadModalOverlay">
           <div class="modal">
             <div class="modal-head">
-              <div><div class="modal-title">${lead.nombre || "Lead"}</div><div class="muted">${lead.empresa || "--"}${lead.ciudad ? " · " + lead.ciudad : ""}</div></div>
+              <div>
+                <div class="modal-title">${lead.nombre || "Lead"}</div>
+                <div class="muted">${lead.empresa || "--"}${lead.ciudad ? " · " + lead.ciudad : ""}</div>
+              </div>
               <button class="close" id="closeModalBtn">×</button>
             </div>
-            <div class="form-grid"><div class="fg"><label>Stage</label><select id="editStage">${STAGES.map(s => `<option value="${s}" ${lead.stage === s ? "selected" : ""}>${s}</option>`).join("")}</select></div><div class="fg"><label>Siguiente seguimiento</label><input type="date" id="editNextFollow" value="${lead.nextFollow || ""}" /></div></div>
-            <div class="form-grid"><div class="fg"><label>Rep</label><select id="editRep">${REPS.map(r => `<option value="${r}" ${lead.rep === r ? "selected" : ""}>${r}</option>`).join("")}</select></div><div class="fg"><label>Fuente</label><select id="editFuente">${FUENTES.map(f => `<option value="${f}" ${lead.fuente === f ? "selected" : ""}>${f}</option>`).join("")}</select></div></div>
-            <div class="form-grid"><div class="fg"><label>Teléfono</label><input id="editTel" value="${lead.tel || ""}" /></div><div class="fg"><label>Email</label><input id="editEmail" value="${lead.email || ""}" /></div></div>
-            <div class="fg" style="margin-bottom:14px"><label>Nueva nota</label><textarea id="newNoteText" placeholder="Escribe una nota..."></textarea></div>
-            <div style="margin-bottom:16px"><div class="card-title" style="font-size:14px;margin-bottom:10px">Historial</div>${notes.length ? notes.slice().reverse().map(n => `<div class="note"><div>${n.text || ""}</div><div class="note-meta">${n.rep || "Yo"} · ${n.date || ""}</div></div>`).join("") : `<div class="empty">Sin notas.</div>`}</div>
-            <div class="actions"><button class="btn btn-dark" id="saveLeadEditBtn">Guardar cambios</button><button class="btn" id="deleteLeadBtn">Eliminar</button><button class="btn" id="cancelLeadBtn">Cerrar</button></div>
+            <div class="form-grid">
+              <div class="fg"><label>Stage</label><select id="editStage">${STAGES.map(s => `<option value="${s}" ${lead.stage === s ? "selected" : ""}>${s}</option>`).join("")}</select></div>
+              <div class="fg"><label>Siguiente seguimiento</label><input type="date" id="editNextFollow" value="${lead.nextFollow || ""}" /></div>
+            </div>
+            <div class="form-grid">
+              <div class="fg"><label>Rep</label><select id="editRep">${REPS.map(r => `<option value="${r}" ${lead.rep === r ? "selected" : ""}>${r}</option>`).join("")}</select></div>
+              <div class="fg"><label>Fuente</label><select id="editFuente">${FUENTES.map(f => `<option value="${f}" ${lead.fuente === f ? "selected" : ""}>${f}</option>`).join("")}</select></div>
+            </div>
+            <div class="form-grid">
+              <div class="fg"><label>Teléfono</label><input id="editTel" value="${lead.tel || ""}" /></div>
+              <div class="fg"><label>Email</label><input id="editEmail" value="${lead.email || ""}" /></div>
+            </div>
+            <div class="fg" style="margin-bottom:14px">
+              <label>Nueva nota</label>
+              <textarea id="newNoteText" placeholder="Escribe una nota..."></textarea>
+            </div>
+            <div style="margin-bottom:16px">
+              <div class="card-title" style="font-size:14px;margin-bottom:10px">Historial</div>
+              ${notes.length
+                ? notes.slice().reverse().map(n => `<div class="note"><div>${n.text || ""}</div><div class="note-meta">${n.rep || "Yo"} · ${n.date || ""}</div></div>`).join("")
+                : `<div class="empty">Sin notas.</div>`}
+            </div>
+            <div class="actions">
+              <button class="btn btn-dark" id="saveLeadEditBtn">Guardar cambios</button>
+              <button class="btn" id="deleteLeadBtn">Eliminar</button>
+              <button class="btn" id="cancelLeadBtn">Cerrar</button>
+            </div>
           </div>
         </div>
       `;
 
       document.getElementById("closeModalBtn").onclick = closeModal;
       document.getElementById("cancelLeadBtn").onclick = closeModal;
-      document.getElementById("leadModalOverlay").onclick = e => { if(e.target.id === "leadModalOverlay") closeModal(); };
+      document.getElementById("leadModalOverlay").onclick = e => {
+        if(e.target.id === "leadModalOverlay") closeModal();
+      };
 
       document.getElementById("saveLeadEditBtn").onclick = async () => {
         const updatedNotes = Array.isArray(lead.notes) ? [...lead.notes] : [];
         const noteText = document.getElementById("newNoteText").value.trim();
+
         if(noteText){
-          updatedNotes.push({ text: noteText, rep: "Yo", date: new Date().toISOString().slice(0,10) });
+          updatedNotes.push({
+            text: noteText,
+            rep: "Yo",
+            date: new Date().toISOString().slice(0,10)
+          });
         }
 
-        await upsertLead({
-          ...lead,
-          rep: document.getElementById("editRep").value,
-          fuente: document.getElementById("editFuente").value,
-          stage: document.getElementById("editStage").value,
-          nextFollow: document.getElementById("editNextFollow").value,
-          tel: document.getElementById("editTel").value.trim(),
-          email: document.getElementById("editEmail").value.trim(),
-          notes: updatedNotes,
-          updatedAt: new Date().toISOString().slice(0,10)
-        });
+        try{
+          await upsertLead({
+            ...lead,
+            rep: document.getElementById("editRep").value,
+            fuente: document.getElementById("editFuente").value,
+            stage: document.getElementById("editStage").value,
+            nextFollow: document.getElementById("editNextFollow").value,
+            tel: document.getElementById("editTel").value.trim(),
+            email: document.getElementById("editEmail").value.trim(),
+            notes: updatedNotes,
+            updatedAt: new Date().toISOString().slice(0,10)
+          });
 
-        closeModal();
-        toast("Lead actualizado");
-        await loadCRM();
-        render();
+          closeModal();
+          toast("Lead actualizado");
+          await loadAllData();
+          render();
+        }catch(err){
+          console.error(err);
+          toast("No se pudo actualizar el lead");
+        }
       };
 
       document.getElementById("deleteLeadBtn").onclick = async () => {
         if(!confirm("¿Eliminar este lead?")) return;
-        await deleteLeadRemote(lead.id);
-        closeModal();
-        toast("Lead eliminado");
-        await loadCRM();
-        render();
+
+        try{
+          await deleteLeadRemote(lead.id);
+          closeModal();
+          toast("Lead eliminado");
+          await loadAllData();
+          render();
+        }catch(err){
+          console.error(err);
+          toast("No se pudo eliminar el lead");
+        }
       };
     }
 
@@ -522,11 +646,13 @@
 
     async function loadCurrentTab(){
       try{
-        if(currentTab === "dashboard"){ showLoading("Dashboard"); await loadDashboard(); }
-        if(currentTab === "crm"){ showLoading("CRM Leads"); await loadCRM(); }
-        if(currentTab === "pipeline"){ showLoading("Pipeline"); await loadPipeline(); }
-        if(currentTab === "comodatos"){ showLoading("Comodatos"); await loadComodatos(); }
-        if(currentTab === "cobranza"){ showLoading("Cobranza"); await loadCobranza(); }
+        if(currentTab === "dashboard") showLoading("Dashboard");
+        if(currentTab === "crm") showLoading("CRM Leads");
+        if(currentTab === "pipeline") showLoading("Pipeline");
+        if(currentTab === "comodatos") showLoading("Comodatos");
+        if(currentTab === "cobranza") showLoading("Cobranza");
+
+        await loadAllData();
         render();
       }catch(e){
         console.error(e);
