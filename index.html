@@ -1,56 +1,21 @@
-<html lang="es"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRO KICKS - Sales + CRM</title>
-<style>
-  :root{
-    --bg:#F8F7F4;
-    --bg2:#FFFFFF;
-    --card:#FFFFFF;
-    --border:#E5E2DB;
-    --text:#1A1A1A;
-    --muted:#6B7280;
-    --accent:#111827;
-    --green:#10B981;
-    --green-bg:#ECFDF5;
-    --red:#EF4444;
-    --red-bg:#FEF2F2;
-    --blue:#3B82F6;
-    --blue-bg:#EFF6FF;
-    --yellow:#F59E0B;
-    --yellow-bg:#FFFBEB;
-    --purple:#8B5CF6;
-    --purple-bg:#F5F3FF;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
-  .app{display:flex;flex-direction:column;min-height:100vh}
-  #mainNav{background:var(--accent);padding:0 16px;display:flex;align-items:center;gap:4px;height:48px;overflow-x:auto}
-  #mainNav .logo{color:#fff;font-weight:800;font-size:15px;letter-spacing:.5px;margin-right:16px;white-space:nowrap;display:flex;align-items:center;gap:8px}
-  .nav-tab{background:none;border:none;color:rgba(255,255,255,.65);padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;transition:all .15s}
-  .nav-tab:hover{color:#fff;background:rgba(255,255,255,.1)}
-  .nav-tab.on{color:#fff;background:rgba(255,255,255,.18)}
-  #mainContent{flex:1;padding:20px;max-width:1400px;width:100%;margin:0 auto}
-</style>
-</head>
-<body>
-<div class="app">
-  <nav id="mainNav">
-    <div class="logo">
-      <span>PRO KICKS</span>
-    </div>
-    <button class="nav-tab on" onclick="switchMain('dashboard')">📊 Dashboard</button>
-    <button class="nav-tab" onclick="switchMain('crm')">🎯 CRM Leads</button>
-    <button class="nav-tab" onclick="switchMain('ventas')">📋 Pipeline</button>
-    <button class="nav-tab" onclick="switchMain('comodato')">📦 Comodatos</button>
-    <button class="nav-tab" onclick="switchMain('cobranza')">💰 Cobranza</button>
-  </nav>
-  <div id="mainContent"></div>
-</div>
-
-<script>
-// (Aquí va TODO tu JS original — no lo recorto para que funcione completo)
-console.log("PRO KICKS CRM listo");
-</script>
-</body>
-</html>
+function renderDash(){
+  var mc=document.getElementById('mainContent');
+  var d=D.k;
+  mc.innerHTML=
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">'+
+    '<h1 style="font-size:20px;font-weight:800">Dashboard</h1>'+
+    '<button id="br" class="btn btn-secondary btn-sm" onclick="rl()">↻ Actualizar</button></div>'+
+    '<div class="kpi-row">'+
+    kpi('Ventas Cerradas',d.cerradas,'#10B981')+
+    kpi('Prospección',d.prospeccion,'#3B82F6')+
+    kpi('Comodato',d.comodato,'#8B5CF6')+
+    kpi('Total Devices',d.totalDev,'#F59E0B')+
+    kpi('Producidos',d.producidos,'#111827')+
+    kpi('Redwood',d.redwood,'#EF4444')+
+    '</div>'+
+    '<div class="card"><div class="card-title">CRM Leads rápido</div>'+
+    '<div style="display:flex;gap:10px;flex-wrap:wrap">'+
+    '<button class="btn btn-primary btn-sm" onclick="switchMain(\'crm\')">🎯 Ver CRM</button>'+
+    '<button class="btn btn-secondary btn-sm" onclick="showAddModal()">+ Nuevo Lead</button>'+
+    '</div></div>';
+}
