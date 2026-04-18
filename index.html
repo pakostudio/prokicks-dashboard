@@ -12,19 +12,20 @@ body{
   padding:20px;
 }
 h1{margin-bottom:20px}
-button{
-  padding:10px 14px;
-  background:#000;
-  color:#fff;
-  border:none;
+nav button{
+  margin-right:10px;
+  padding:8px 12px;
   cursor:pointer;
 }
-pre{
+table{
+  width:100%;
+  border-collapse:collapse;
   margin-top:20px;
   background:#fff;
-  padding:20px;
-  border-radius:10px;
-  overflow:auto;
+}
+td,th{
+  padding:10px;
+  border:1px solid #ddd;
 }
 </style>
 </head>
@@ -33,28 +34,106 @@ pre{
 
 <h1>PRO KICKS CRM</h1>
 
-<button onclick="loadData()">Cargar datos</button>
+<nav>
+  <button onclick="tab='pipeline';render()">Pipeline</button>
+  <button onclick="tab='comodatos';render()">Comodatos</button>
+  <button onclick="tab='cobranza';render()">Cobranza</button>
+</nav>
 
-<pre id="output"></pre>
+<div id="app">Cargando...</div>
 
 <script>
 
-// ✅ ESTA ES LA URL CORRECTA (YA ACTUALIZADA)
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
+const API = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
 
-async function loadData(){
-  try{
-    const res = await fetch(APPS_SCRIPT_URL);
-    const data = await res.json();
+let data = {};
+let tab = "pipeline";
 
-    document.getElementById("output").textContent =
-      JSON.stringify(data,null,2);
+async function load(){
+  const res = await fetch(API);
+  data = await res.json();
+  render();
+}
 
-  }catch(e){
-    document.getElementById("output").textContent =
-      "Error: " + e;
+function render(){
+  const el = document.getElementById("app");
+
+  if(tab === "pipeline"){
+    el.innerHTML = `
+      <h2>Pipeline</h2>
+      <table>
+        <tr>
+          <th>Cliente</th>
+          <th>Rep</th>
+          <th>Devices</th>
+          <th>Venta</th>
+          <th>Pago</th>
+          <th>Saldo</th>
+          <th>Ciudad</th>
+        </tr>
+        ${data.pipeline.map(r=>`
+          <tr>
+            <td>${r.cliente}</td>
+            <td>${r.rep}</td>
+            <td>${r.devices}</td>
+            <td>${r.estadoVenta}</td>
+            <td>${r.estadoPago}</td>
+            <td>${r.saldo}</td>
+            <td>${r.ciudad}</td>
+          </tr>
+        `).join("")}
+      </table>
+    `;
+  }
+
+  if(tab === "comodatos"){
+    el.innerHTML = `
+      <h2>Comodatos</h2>
+      <table>
+        <tr>
+          <th>Cliente</th>
+          <th>Rep</th>
+          <th>Devices</th>
+          <th>Status</th>
+          <th>Ciudad</th>
+        </tr>
+        ${data.comodatos.map(r=>`
+          <tr>
+            <td>${r.cliente}</td>
+            <td>${r.rep}</td>
+            <td>${r.devices}</td>
+            <td>${r.estado}</td>
+            <td>${r.ciudad}</td>
+          </tr>
+        `).join("")}
+      </table>
+    `;
+  }
+
+  if(tab === "cobranza"){
+    el.innerHTML = `
+      <h2>Cobranza</h2>
+      <table>
+        <tr>
+          <th>Cliente</th>
+          <th>Rep</th>
+          <th>Saldo</th>
+          <th>Status</th>
+        </tr>
+        ${data.cobranza.map(r=>`
+          <tr>
+            <td>${r.cliente}</td>
+            <td>${r.rep}</td>
+            <td>${r.saldo}</td>
+            <td>${r.estado}</td>
+          </tr>
+        `).join("")}
+      </table>
+    `;
   }
 }
+
+load();
 
 </script>
 
