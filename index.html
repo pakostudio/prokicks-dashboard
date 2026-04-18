@@ -1,231 +1,1121 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRO KICKS INVENTARIO</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRO KICKS INVENTARIO</title>
+  <style>
+    :root{
+      --bg:#f3f6fb;
+      --bg-2:#eef3f9;
+      --panel:#ffffff;
+      --panel-2:#f8fbff;
+      --line:#dbe4f0;
+      --text:#10213d;
+      --muted:#6f809d;
+      --primary:#1f4fa3;
+      --primary-2:#2f6fe4;
+      --primary-soft:#e9f1ff;
+      --green:#1f9d55;
+      --green-bg:#e8f8ef;
+      --yellow:#b7791f;
+      --yellow-bg:#fff7df;
+      --red:#c53030;
+      --red-bg:#fdecec;
+      --blue:#2b6cb0;
+      --blue-bg:#e8f1ff;
+      --shadow:0 12px 28px rgba(16,33,61,.08);
+      --radius:20px;
+    }
 
-<style>
-body{
-  margin:0;
-  font-family: Inter, Arial;
-  background:#0f172a;
-  color:#fff;
-}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%);
+      color:var(--text);
+    }
 
-.container{
-  padding:30px;
-}
+    .app{
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: 18px 18px 28px;
+    }
 
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:30px;
-}
+    .hero{
+      background:linear-gradient(135deg,#f7fbff 0%, #edf4ff 100%);
+      border:1px solid #d8e5fb;
+      border-radius:28px;
+      padding:22px 22px 18px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
 
-.title{
-  font-size:38px;
-  font-weight:900;
-}
+    .hero-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
 
-.tabs button{
-  margin-right:10px;
-  padding:10px 16px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  background:#1e293b;
-  color:#fff;
-}
+    .eyebrow{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:var(--muted);
+      font-weight:800;
+      margin-bottom:6px;
+    }
 
-.tabs button.active{
-  background:#3b82f6;
-}
+    .title{
+      margin:0;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height:1;
+      font-weight:900;
+      color:#0e2346;
+    }
 
-.card{
-  background:#1e293b;
-  padding:20px;
-  border-radius:16px;
-}
+    .subtitle{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
+    .hero-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
 
-th{
-  text-align:left;
-  padding:12px;
-  font-size:12px;
-  color:#94a3b8;
-}
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:11px 14px;
+      font-size:13px;
+      font-weight:800;
+      transition:.18s ease;
+    }
 
-td{
-  padding:14px;
-  border-top:1px solid #334155;
-}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
+    }
+    .btn-secondary{
+      background:#fff;
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+    .btn-danger{
+      background:var(--red);
+      color:#fff;
+    }
+    .btn-soft{
+      background:var(--primary-soft);
+      color:var(--primary);
+      border:1px solid #cfe0ff;
+    }
 
-.badge{
-  padding:6px 10px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold;
-}
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
 
-.green{background:#16a34a;}
-.yellow{background:#eab308;}
-.blue{background:#3b82f6;}
-</style>
+    .tab{
+      border:none;
+      cursor:pointer;
+      border-radius:14px;
+      padding:10px 14px;
+      font-size:13px;
+      font-weight:800;
+      background:#fff;
+      color:var(--muted);
+      border:1px solid var(--line);
+    }
+
+    .tab.active{
+      background:var(--primary);
+      color:#fff;
+      border-color:var(--primary);
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(6,minmax(0,1fr));
+      gap:14px;
+      margin-bottom:16px;
+    }
+
+    .kpi{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:16px 16px 14px;
+      min-height:118px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .kpi-label{
+      font-size:11px;
+      line-height:1.15;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+      font-weight:800;
+      max-width:130px;
+    }
+
+    .kpi-value{
+      font-size:34px;
+      line-height:1;
+      font-weight:900;
+      color:#0e2346;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .panel-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .panel-title{
+      margin:0;
+      font-size:24px;
+      line-height:1;
+      font-weight:900;
+      color:#10213d;
+    }
+
+    .panel-subtitle{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .meta-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      background:#f7faff;
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .two-col{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+    }
+
+    table{
+      width:100%;
+      min-width:900px;
+      border-collapse:collapse;
+    }
+
+    th{
+      text-align:left;
+      padding:12px 14px;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+      background:#f8fbff;
+      border-bottom:1px solid var(--line);
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+
+    td{
+      padding:12px 14px;
+      border-bottom:1px solid var(--line);
+      font-size:13px;
+      color:#183154;
+      vertical-align:middle;
+    }
+
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:#fbfdff}
+
+    .name{
+      font-weight:900;
+      color:#10213d;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:11px;
+      font-weight:900;
+    }
+
+    .b-green{background:var(--green-bg); color:var(--green)}
+    .b-yellow{background:var(--yellow-bg); color:var(--yellow)}
+    .b-red{background:var(--red-bg); color:var(--red)}
+    .b-blue{background:var(--blue-bg); color:var(--blue)}
+    .b-gray{background:#eef2f7; color:#5e708d}
+
+    .summary-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .summary-item{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:var(--panel-2);
+    }
+
+    .summary-item strong{
+      display:block;
+      color:var(--text);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:6px;
+    }
+
+    .summary-item span{
+      display:block;
+      font-size:20px;
+      font-weight:900;
+      color:#10213d;
+    }
+
+    .crm-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+    }
+
+    .crm-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+
+    .crm-name{
+      margin:0 0 4px;
+      font-size:18px;
+      font-weight:900;
+      color:#10213d;
+    }
+
+    .crm-company{
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .crm-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .crm-box{
+      background:#f8fbff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:9px 10px;
+    }
+
+    .crm-box strong{
+      display:block;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+      margin-bottom:5px;
+    }
+
+    .crm-box span{
+      display:block;
+      font-size:12px;
+      color:#173154;
+      word-break:break-word;
+    }
+
+    .card-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .empty{
+      padding:30px 12px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(14,28,53,.35);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:999;
+    }
+
+    .modal-overlay.open{display:flex}
+
+    .modal{
+      width:720px;
+      max-width:100%;
+      max-height:90vh;
+      overflow:auto;
+      background:#fff;
+      border-radius:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,.18);
+      border:1px solid var(--line);
+      padding:18px;
+    }
+
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .modal-title{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+      color:#10213d;
+    }
+
+    .modal-sub{
+      margin:6px 0 0;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .close{
+      border:none;
+      background:#eef4ff;
+      color:#244a8f;
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .field.full{grid-column:1 / -1}
+
+    .field label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--muted);
+      font-weight:800;
+    }
+
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:11px 12px;
+      font-size:13px;
+      font-family:inherit;
+      color:#163055;
+      background:#fff;
+      outline:none;
+    }
+
+    .field textarea{
+      resize:vertical;
+      min-height:92px;
+    }
+
+    .modal-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    #toast{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:1000;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .toast-item{
+      background:#10213d;
+      color:#fff;
+      padding:12px 14px;
+      border-radius:12px;
+      font-size:12px;
+      font-weight:800;
+      box-shadow:var(--shadow);
+    }
+
+    @media (max-width: 1260px){
+      .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .crm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .two-col{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 780px){
+      .app{padding:14px}
+      .hero{padding:16px}
+      .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .crm-grid{grid-template-columns:1fr}
+      .form-grid{grid-template-columns:1fr}
+      .panel-title{font-size:20px}
+    }
+
+    @media (max-width: 520px){
+      .kpis{grid-template-columns:1fr}
+      .tab{flex:1}
+      .btn{width:100%}
+      .hero-actions{width:100%}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <section class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="eyebrow">Sistema operativo comercial</div>
+          <h1 class="title">PRO KICKS INVENTARIO</h1>
+          <p class="subtitle">Dashboard, ventas, inventario en uso, cobranza y CRM conectados al Google Sheet central.</p>
+        </div>
 
-<div class="container">
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="openLeadModal()">+ Nuevo lead</button>
+          <button class="btn btn-secondary" onclick="load()">Actualizar</button>
+        </div>
+      </div>
 
-<div class="header">
-  <div class="title">PRO KICKS INVENTARIO</div>
-  <div class="tabs">
-    <button onclick="setTab('pipeline')" id="btn-pipeline">Ventas</button>
-    <button onclick="setTab('comodatos')" id="btn-comodatos">Inventario en uso</button>
-    <button onclick="setTab('cobranza')" id="btn-cobranza">Cobranza</button>
-    <button onclick="setTab('leads')" id="btn-leads">Leads</button>
+      <div class="tabs">
+        <button class="tab active" id="tab-dashboard" onclick="setTab('dashboard')">Dashboard</button>
+        <button class="tab" id="tab-pipeline" onclick="setTab('pipeline')">Ventas</button>
+        <button class="tab" id="tab-comodatos" onclick="setTab('comodatos')">Inventario en uso</button>
+        <button class="tab" id="tab-cobranza" onclick="setTab('cobranza')">Cobranza</button>
+        <button class="tab" id="tab-crm" onclick="setTab('crm')">CRM</button>
+      </div>
+    </section>
+
+    <div id="appContent"></div>
   </div>
-</div>
 
-<div id="app" class="card">Cargando...</div>
+  <div id="modalRoot"></div>
+  <div id="toast"></div>
 
-</div>
+  <script>
+    const API = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
 
-<script>
+    let data = {};
+    let currentTab = "dashboard";
 
-const API = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
+    const STAGES = ["Nuevo","Contactado","Demo","Propuesta","Negociación","Cerrado","Perdido"];
+    const FUENTES = ["Referido","Instagram","Facebook","WhatsApp","Web","Evento","Otro"];
+    const REPS = ["Billy","Sean","Pako","Jonathan","Jorge","Juan","Fernando","LMS","Otro"];
 
-let data = {};
-let tab = "pipeline";
+    function safeArray(v){
+      return Array.isArray(v) ? v : [];
+    }
 
-function badge(txt){
-  txt = (txt||"").toUpperCase();
+    function cleanCRM(leads){
+      return safeArray(leads).filter(l => {
+        const id = String(l.id || "").trim();
+        const nombre = String(l.nombre || "").trim();
+        const empresa = String(l.empresa || "").trim();
+        return id || nombre || empresa;
+      });
+    }
 
-  if(txt.includes("PAGADO") || txt.includes("CERRADA"))
-    return `<span class="badge green">${txt}</span>`;
+    function cleanComodatos(rows){
+      return safeArray(rows).filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"));
+    }
 
-  if(txt.includes("PENDIENTE"))
-    return `<span class="badge yellow">${txt}</span>`;
+    function cleanCobranza(rows){
+      return safeArray(rows).filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"));
+    }
 
-  return `<span class="badge blue">${txt}</span>`;
-}
+    function toast(msg){
+      const root = document.getElementById("toast");
+      const el = document.createElement("div");
+      el.className = "toast-item";
+      el.textContent = msg;
+      root.appendChild(el);
+      setTimeout(() => el.remove(), 2600);
+    }
 
-function setTab(t){
-  tab = t;
-  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
-  document.getElementById("btn-"+t).classList.add("active");
-  render();
-}
+    function badge(value){
+      const txt = String(value || "").trim();
+      const up = txt.toUpperCase();
 
-async function load(){
-  const res = await fetch(API);
-  data = await res.json();
-  setTab("pipeline");
-}
+      if (!txt) return `<span class="badge b-gray">--</span>`;
+      if (up.includes("PAGADO") || up.includes("CERRADA") || up.includes("EN USO") || up === "NUEVO") return `<span class="badge b-green">${txt}</span>`;
+      if (up.includes("PENDIENTE")) return `<span class="badge b-yellow">${txt}</span>`;
+      if (up.includes("INCOMPLETA") || up.includes("PROSPECCIÓN") || up.includes("PROSPECCION") || up.includes("DEMO") || up.includes("PROPUESTA") || up.includes("NEGOCIACIÓN") || up.includes("NEGOCIACION") || up.includes("CONTACTADO")) return `<span class="badge b-blue">${txt}</span>`;
+      if (up.includes("PERDIDO")) return `<span class="badge b-red">${txt}</span>`;
+      return `<span class="badge b-gray">${txt}</span>`;
+    }
 
-function render(){
+    function setTab(tab){
+      currentTab = tab;
+      document.querySelectorAll(".tab").forEach(btn => btn.classList.remove("active"));
+      const active = document.getElementById(`tab-${tab}`);
+      if (active) active.classList.add("active");
+      render();
+    }
 
-  const el = document.getElementById("app");
+    async function apiGetAll(){
+      const res = await fetch(API, { cache:"no-store" });
+      if (!res.ok) throw new Error("No se pudo leer la API");
+      return await res.json();
+    }
 
-  if(tab==="pipeline"){
-    el.innerHTML = `
-      <h2>Ventas</h2>
-      <table>
-        <tr>
-          <th>Cliente</th><th>Rep</th><th>Devices</th>
-          <th>Venta</th><th>Pago</th><th>Saldo</th><th>Ciudad</th>
-        </tr>
-        ${data.pipeline.map(r=>`
-          <tr>
-            <td>${r.cliente}</td>
-            <td>${r.rep}</td>
-            <td>${r.devices}</td>
-            <td>${badge(r.estadoVenta)}</td>
-            <td>${badge(r.estadoPago)}</td>
-            <td>${r.saldo}</td>
-            <td>${r.ciudad}</td>
-          </tr>
-        `).join("")}
-      </table>
-    `;
-  }
+    async function apiPost(payload){
+      const body = new URLSearchParams(payload);
+      const res = await fetch(API, { method:"POST", body });
+      if (!res.ok) throw new Error("No se pudo guardar");
+      return await res.json();
+    }
 
-  if(tab==="comodatos"){
-    el.innerHTML = `
-      <h2>Inventario en uso</h2>
-      <table>
-        <tr>
-          <th>Cliente</th><th>Rep</th><th>Devices</th>
-          <th>Status</th><th>Ciudad</th>
-        </tr>
-        ${data.comodatos.map(r=>`
-          <tr>
-            <td>${r.cliente}</td>
-            <td>${r.rep}</td>
-            <td>${r.devices}</td>
-            <td>${badge(r.estado)}</td>
-            <td>${r.ciudad}</td>
-          </tr>
-        `).join("")}
-      </table>
-    `;
-  }
+    async function load(){
+      const root = document.getElementById("appContent");
+      root.innerHTML = `<div class="panel"><div class="empty">Cargando información...</div></div>`;
 
-  if(tab==="cobranza"){
-    el.innerHTML = `
-      <h2>Cobranza</h2>
-      <table>
-        <tr>
-          <th>Cliente</th><th>Rep</th><th>Saldo</th><th>Status</th>
-        </tr>
-        ${data.cobranza.map(r=>`
-          <tr>
-            <td>${r.cliente}</td>
-            <td>${r.rep}</td>
-            <td>${r.saldo}</td>
-            <td>${badge(r.estado)}</td>
-          </tr>
-        `).join("")}
-      </table>
-    `;
-  }
+      try{
+        data = await apiGetAll();
+        render();
+      }catch(e){
+        root.innerHTML = `<div class="panel"><div class="empty">No se pudo cargar la información.</div></div>`;
+      }
+    }
 
-  if(tab==="leads"){
-    const leads = data.leads.filter(l => l.nombre || l.empresa);
+    function renderDashboard(){
+      const d = data.dashboard || {};
+      const pipeline = safeArray(data.pipeline);
+      const comodatos = cleanComodatos(data.comodatos);
+      const cobranza = cleanCobranza(data.cobranza);
+      const crm = cleanCRM(data.leads);
 
-    el.innerHTML = `
-      <h2>Leads</h2>
-      <table>
-        <tr>
-          <th>Nombre</th><th>Empresa</th><th>Rep</th>
-          <th>Ciudad</th><th>Tel</th><th>Email</th><th>Stage</th>
-        </tr>
-        ${leads.map(l=>`
-          <tr>
-            <td>${l.nombre || "--"}</td>
-            <td>${l.empresa || "--"}</td>
-            <td>${l.rep || "--"}</td>
-            <td>${l.ciudad || "--"}</td>
-            <td>${l.tel || "--"}</td>
-            <td>${l.email || "--"}</td>
-            <td>${badge(l.stage || "--")}</td>
-          </tr>
-        `).join("")}
-      </table>
-    `;
-  }
-}
+      return `
+        <div class="kpis">
+          <div class="kpi">
+            <div class="kpi-label">Ventas cerradas</div>
+            <div class="kpi-value">${d.cerradas ?? 0}</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Ventas incompletas</div>
+            <div class="kpi-value">${d.incompletas ?? 0}</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Prospección</div>
+            <div class="kpi-value">${d.prospeccion ?? 0}</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">En comodato</div>
+            <div class="kpi-value">${d.comodato ?? 0}</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Total devices</div>
+            <div class="kpi-value">${d.totalDevices ?? 0}</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-label">Inventario Redwood</div>
+            <div class="kpi-value">${d.redwood ?? 0}</div>
+          </div>
+        </div>
 
-load();
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2 class="panel-title">Resumen ejecutivo</h2>
+                <p class="panel-subtitle">Vista inicial del sistema. Redwood es solo lectura y se controla desde el Sheet.</p>
+              </div>
+              <div class="meta-pill">CRM: ${crm.length} · Ventas: ${pipeline.length} · Inventario en uso: ${comodatos.length} · Cobranza: ${cobranza.length}</div>
+            </div>
 
-</script>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Métrica</th>
+                    <th>Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="name">Ventas cerradas</td><td>${d.cerradas ?? 0}</td></tr>
+                  <tr><td class="name">Ventas incompletas</td><td>${d.incompletas ?? 0}</td></tr>
+                  <tr><td class="name">Prospección</td><td>${d.prospeccion ?? 0}</td></tr>
+                  <tr><td class="name">En comodato</td><td>${d.comodato ?? 0}</td></tr>
+                  <tr><td class="name">Total devices</td><td>${d.totalDevices ?? 0}</td></tr>
+                  <tr><td class="name">Producidos</td><td>${d.producidos ?? 0}</td></tr>
+                  <tr><td class="name">Inventario Redwood</td><td>${d.redwood ?? 0}</td></tr>
+                  <tr><td class="name">Diferencia</td><td>${d.diferencia ?? 0}</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
+          <div class="summary-list">
+            <div class="summary-item">
+              <strong>Inventario Redwood</strong>
+              <span>${d.redwood ?? 0}</span>
+            </div>
+            <div class="summary-item">
+              <strong>Control</strong>
+              <span style="font-size:15px;font-weight:800;color:#5f7393">Dato manual. Solo lectura en la app.</span>
+            </div>
+            <div class="summary-item">
+              <strong>Diferencia</strong>
+              <span>${d.diferencia ?? 0}</span>
+            </div>
+            <div class="summary-item">
+              <strong>Acción rápida</strong>
+              <span style="font-size:15px;font-weight:800;color:#5f7393">Crear lead nuevo desde esta pantalla.</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderVentas(){
+      const rows = safeArray(data.pipeline);
+
+      return `
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Ventas</h2>
+              <p class="panel-subtitle">Pipeline comercial con lectura directa desde la hoja central.</p>
+            </div>
+            <div class="meta-pill">${rows.length} registros</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Rep</th>
+                  <th>Devices</th>
+                  <th>Venta</th>
+                  <th>Pago</th>
+                  <th>Saldo</th>
+                  <th>Ciudad</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  rows.length
+                  ? rows.map(r => `
+                    <tr>
+                      <td class="name">${r.cliente || "--"}</td>
+                      <td>${r.rep || "--"}</td>
+                      <td>${r.devices || "--"}</td>
+                      <td>${badge(r.estadoVenta || "--")}</td>
+                      <td>${badge(r.estadoPago || "--")}</td>
+                      <td>${r.saldo || "--"}</td>
+                      <td>${r.ciudad || "--"}</td>
+                    </tr>
+                  `).join("")
+                  : `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderComodatos(){
+      const rows = cleanComodatos(data.comodatos);
+
+      return `
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Inventario en uso</h2>
+              <p class="panel-subtitle">Equipos colocados actualmente.</p>
+            </div>
+            <div class="meta-pill">${rows.length} registros</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Rep</th>
+                  <th>Devices</th>
+                  <th>Status</th>
+                  <th>Ciudad</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  rows.length
+                  ? rows.map(r => `
+                    <tr>
+                      <td class="name">${r.cliente || "--"}</td>
+                      <td>${r.rep || "--"}</td>
+                      <td>${r.devices || "--"}</td>
+                      <td>${badge(r.estado || "--")}</td>
+                      <td>${r.ciudad || "--"}</td>
+                    </tr>
+                  `).join("")
+                  : `<tr><td colspan="5" class="empty">Sin registros.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCobranza(){
+      const rows = cleanCobranza(data.cobranza);
+
+      return `
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Cobranza</h2>
+              <p class="panel-subtitle">Saldos pendientes visibles desde la misma base de datos.</p>
+            </div>
+            <div class="meta-pill">${rows.length} registros</div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Rep</th>
+                  <th>Saldo</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${
+                  rows.length
+                  ? rows.map(r => `
+                    <tr>
+                      <td class="name">${r.cliente || "--"}</td>
+                      <td>${r.rep || "--"}</td>
+                      <td>${r.saldo || "--"}</td>
+                      <td>${badge(r.estado || "--")}</td>
+                    </tr>
+                  `).join("")
+                  : `<tr><td colspan="4" class="empty">Sin registros.</td></tr>`
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCRM(){
+      const leads = cleanCRM(data.leads);
+
+      return `
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">CRM</h2>
+              <p class="panel-subtitle">Leads visibles, editables y sincronizados con el Sheet.</p>
+            </div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <div class="meta-pill">${leads.length} registros</div>
+              <button class="btn btn-primary" onclick="openLeadModal()">+ Nuevo lead</button>
+            </div>
+          </div>
+
+          ${
+            leads.length
+            ? `<div class="crm-grid">
+                ${leads.map(l => `
+                  <div class="crm-card">
+                    <h3 class="crm-name">${l.nombre || "Sin nombre"}</h3>
+                    <p class="crm-company">${l.empresa || "Sin empresa"}</p>
+
+                    <div class="crm-meta">
+                      <div class="crm-box">
+                        <strong>Rep</strong>
+                        <span>${l.rep || "--"}</span>
+                      </div>
+                      <div class="crm-box">
+                        <strong>Stage</strong>
+                        <span>${String((l.stage || "--")).replace(/<[^>]*>/g,'')}</span>
+                      </div>
+                      <div class="crm-box">
+                        <strong>Ciudad</strong>
+                        <span>${l.ciudad || "--"}</span>
+                      </div>
+                      <div class="crm-box">
+                        <strong>Fuente</strong>
+                        <span>${l.fuente || "--"}</span>
+                      </div>
+                      <div class="crm-box">
+                        <strong>Teléfono</strong>
+                        <span>${l.tel || "--"}</span>
+                      </div>
+                      <div class="crm-box">
+                        <strong>Email</strong>
+                        <span>${l.email || "--"}</span>
+                      </div>
+                    </div>
+
+                    <div class="card-actions">
+                      <button class="btn btn-soft" onclick="openLeadModal('${escapeJs(l.id)}')">Editar</button>
+                      <button class="btn btn-danger" onclick="deleteLead('${escapeJs(l.id)}')">Eliminar</button>
+                    </div>
+                  </div>
+                `).join("")}
+              </div>`
+            : `<div class="empty">No hay leads visibles.</div>`
+          }
+        </div>
+      `;
+    }
+
+    function render(){
+      const root = document.getElementById("appContent");
+
+      if (!data || !data.ok){
+        root.innerHTML = `<div class="panel"><div class="empty">Sin información disponible.</div></div>`;
+        return;
+      }
+
+      if (currentTab === "dashboard") root.innerHTML = renderDashboard();
+      if (currentTab === "pipeline") root.innerHTML = renderVentas();
+      if (currentTab === "comodatos") root.innerHTML = renderComodatos();
+      if (currentTab === "cobranza") root.innerHTML = renderCobranza();
+      if (currentTab === "crm") root.innerHTML = renderCRM();
+    }
+
+    function genId(){
+      return "lead_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
+    }
+
+    function findLead(id){
+      return cleanCRM(data.leads).find(l => String(l.id || "") === String(id || ""));
+    }
+
+    function escapeJs(str){
+      return String(str || "").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+    }
+
+    function closeModal(){
+      document.getElementById("modalRoot").innerHTML = "";
+    }
+
+    function openLeadModal(id = ""){
+      const lead = id ? findLead(id) : null;
+
+      document.getElementById("modalRoot").innerHTML = `
+        <div class="modal-overlay open" id="modalOverlay">
+          <div class="modal">
+            <div class="modal-head">
+              <div>
+                <h3 class="modal-title">${lead ? "Editar lead" : "Nuevo lead"}</h3>
+                <p class="modal-sub">Los cambios se guardan en Google Sheets y se reflejan para todos al actualizar.</p>
+              </div>
+              <button class="close" id="closeModalBtn">×</button>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label>Nombre</label>
+                <input id="leadNombre" value="${escapeHtmlAttr(lead?.nombre || "")}" />
+              </div>
+              <div class="field">
+                <label>Empresa</label>
+                <input id="leadEmpresa" value="${escapeHtmlAttr(lead?.empresa || "")}" />
+              </div>
+
+              <div class="field">
+                <label>Rep</label>
+                <select id="leadRep">
+                  ${REPS.map(r => `<option value="${r}" ${lead?.rep === r ? "selected" : ""}>${r}</option>`).join("")}
+                </select>
+              </div>
+              <div class="field">
+                <label>Ciudad</label>
+                <input id="leadCiudad" value="${escapeHtmlAttr(lead?.ciudad || "")}" />
+              </div>
+
+              <div class="field">
+                <label>Teléfono</label>
+                <input id="leadTel" value="${escapeHtmlAttr(lead?.tel || "")}" />
+              </div>
+              <div class="field">
+                <label>Email</label>
+                <input id="leadEmail" value="${escapeHtmlAttr(lead?.email || "")}" />
+              </div>
+
+              <div class="field">
+                <label>Fuente</label>
+                <select id="leadFuente">
+                  ${FUENTES.map(f => `<option value="${f}" ${lead?.fuente === f ? "selected" : ""}>${f}</option>`).join("")}
+                </select>
+              </div>
+              <div class="field">
+                <label>Stage</label>
+                <select id="leadStage">
+                  ${STAGES.map(s => `<option value="${s}" ${lead?.stage === s ? "selected" : ""}>${s}</option>`).join("")}
+                </select>
+              </div>
+
+              <div class="field full">
+                <label>Siguiente seguimiento</label>
+                <input type="date" id="leadNextFollow" value="${escapeHtmlAttr(lead?.nextFollow || "")}" />
+              </div>
+            </div>
+
+            <div class="modal-actions">
+              <button class="btn btn-primary" id="saveLeadBtn">${lead ? "Guardar cambios" : "Guardar lead"}</button>
+              <button class="btn btn-secondary" id="cancelLeadBtn">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("closeModalBtn").onclick = closeModal;
+      document.getElementById("cancelLeadBtn").onclick = closeModal;
+      document.getElementById("modalOverlay").onclick = (e) => {
+        if (e.target.id === "modalOverlay") closeModal();
+      };
+
+      document.getElementById("saveLeadBtn").onclick = async () => {
+        const nombre = document.getElementById("leadNombre").value.trim();
+        if (!nombre){
+          toast("El nombre es obligatorio");
+          return;
+        }
+
+        const payload = {
+          action: "lead_upsert",
+          id: lead?.id || genId(),
+          nombre,
+          empresa: document.getElementById("leadEmpresa").value.trim(),
+          rep: document.getElementById("leadRep").value,
+          ciudad: document.getElementById("leadCiudad").value.trim(),
+          tel: document.getElementById("leadTel").value.trim(),
+          email: document.getElementById("leadEmail").value.trim(),
+          fuente: document.getElementById("leadFuente").value,
+          stage: document.getElementById("leadStage").value,
+          nextFollow: document.getElementById("leadNextFollow").value,
+          notes: "[]",
+          createdAt: lead?.createdAt || new Date().toISOString().slice(0,10),
+          updatedAt: new Date().toISOString().slice(0,10)
+        };
+
+        try{
+          const res = await apiPost(payload);
+          if (!res.ok) throw new Error(res.error || "No se pudo guardar");
+          closeModal();
+          toast(lead ? "Lead actualizado" : "Lead guardado");
+          await load();
+          setTab("crm");
+        }catch(e){
+          toast("No se pudo guardar el lead");
+        }
+      };
+    }
+
+    async function deleteLead(id){
+      if (!id) return;
+      if (!confirm("¿Eliminar este lead?")) return;
+
+      try{
+        const res = await apiPost({ action:"lead_delete", id });
+        if (!res.ok) throw new Error(res.error || "No se pudo eliminar");
+        toast("Lead eliminado");
+        await load();
+        setTab("crm");
+      }catch(e){
+        toast("No se pudo eliminar el lead");
+      }
+    }
+
+    function escapeHtmlAttr(str){
+      return String(str || "")
+        .replace(/&/g,"&amp;")
+        .replace(/"/g,"&quot;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;");
+    }
+
+    load();
+    setInterval(load, 30000);
+  </script>
 </body>
 </html>
