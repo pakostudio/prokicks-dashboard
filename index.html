@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRO KICKS CRM</title>
+<title>PRO KICKS INVENTARIO</title>
 
 <style>
 body{
@@ -47,7 +47,6 @@ body{
   background:#1e293b;
   padding:20px;
   border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
 table{
@@ -68,10 +67,6 @@ td{
   border-top:1px solid #334155;
 }
 
-tr:hover{
-  background:#0f172a;
-}
-
 .badge{
   padding:6px 10px;
   border-radius:20px;
@@ -82,8 +77,6 @@ tr:hover{
 .green{background:#16a34a;}
 .yellow{background:#eab308;}
 .blue{background:#3b82f6;}
-.red{background:#dc2626;}
-
 </style>
 </head>
 
@@ -92,11 +85,12 @@ tr:hover{
 <div class="container">
 
 <div class="header">
-  <div class="title">PRO KICKS CRM</div>
+  <div class="title">PRO KICKS INVENTARIO</div>
   <div class="tabs">
-    <button onclick="setTab('pipeline')" id="btn-pipeline">Pipeline</button>
-    <button onclick="setTab('comodatos')" id="btn-comodatos">Comodatos</button>
+    <button onclick="setTab('pipeline')" id="btn-pipeline">Ventas</button>
+    <button onclick="setTab('comodatos')" id="btn-comodatos">Inventario en uso</button>
     <button onclick="setTab('cobranza')" id="btn-cobranza">Cobranza</button>
+    <button onclick="setTab('leads')" id="btn-leads">Leads</button>
   </div>
 </div>
 
@@ -125,10 +119,8 @@ function badge(txt){
 
 function setTab(t){
   tab = t;
-
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
   document.getElementById("btn-"+t).classList.add("active");
-
   render();
 }
 
@@ -139,11 +131,12 @@ async function load(){
 }
 
 function render(){
+
   const el = document.getElementById("app");
 
   if(tab==="pipeline"){
     el.innerHTML = `
-      <h2>Pipeline</h2>
+      <h2>Ventas</h2>
       <table>
         <tr>
           <th>Cliente</th><th>Rep</th><th>Devices</th>
@@ -166,7 +159,7 @@ function render(){
 
   if(tab==="comodatos"){
     el.innerHTML = `
-      <h2>Comodatos</h2>
+      <h2>Inventario en uso</h2>
       <table>
         <tr>
           <th>Cliente</th><th>Rep</th><th>Devices</th>
@@ -198,6 +191,31 @@ function render(){
             <td>${r.rep}</td>
             <td>${r.saldo}</td>
             <td>${badge(r.estado)}</td>
+          </tr>
+        `).join("")}
+      </table>
+    `;
+  }
+
+  if(tab==="leads"){
+    const leads = data.leads.filter(l => l.nombre || l.empresa);
+
+    el.innerHTML = `
+      <h2>Leads</h2>
+      <table>
+        <tr>
+          <th>Nombre</th><th>Empresa</th><th>Rep</th>
+          <th>Ciudad</th><th>Tel</th><th>Email</th><th>Stage</th>
+        </tr>
+        ${leads.map(l=>`
+          <tr>
+            <td>${l.nombre || "--"}</td>
+            <td>${l.empresa || "--"}</td>
+            <td>${l.rep || "--"}</td>
+            <td>${l.ciudad || "--"}</td>
+            <td>${l.tel || "--"}</td>
+            <td>${l.email || "--"}</td>
+            <td>${badge(l.stage || "--")}</td>
           </tr>
         `).join("")}
       </table>
