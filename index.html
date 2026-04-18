@@ -4,9 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PRO KICKS CRM</title>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f5f5f5;
+  padding:20px;
+}
+h1{margin-bottom:20px}
+button{
+  padding:10px 14px;
+  background:#000;
+  color:#fff;
+  border:none;
+  cursor:pointer;
+}
+pre{
+  margin-top:20px;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  overflow:auto;
+}
+</style>
 </head>
 
-<body style="font-family:Arial;padding:20px">
+<body>
 
 <h1>PRO KICKS CRM</h1>
 
@@ -15,17 +38,24 @@
 <pre id="output"></pre>
 
 <script>
+
+// ✅ ESTA ES LA URL CORRECTA (YA ACTUALIZADA)
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
 
 async function loadData(){
   try{
     const res = await fetch(APPS_SCRIPT_URL);
     const data = await res.json();
-    document.getElementById("output").textContent = JSON.stringify(data,null,2);
+
+    document.getElementById("output").textContent =
+      JSON.stringify(data,null,2);
+
   }catch(e){
-    document.getElementById("output").textContent = "Error: " + e;
+    document.getElementById("output").textContent =
+      "Error: " + e;
   }
 }
+
 </script>
 
 </body>
