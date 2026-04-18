@@ -1,63 +1,821 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRO KICKS Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRO KICKS - Sales + CRM</title>
+  <style>
+    :root{
+      --bg:#F8F7F4;
+      --card:#FFFFFF;
+      --border:#E5E2DB;
+      --text:#1A1A1A;
+      --muted:#6B7280;
+      --accent:#0B1730;
+      --green:#10B981;
+      --red:#EF4444;
+      --blue:#3B82F6;
+      --yellow:#F59E0B;
+      --purple:#8B5CF6;
+    }
 
-<style>
-body{font-family:sans-serif;background:#f8f7f4;margin:0;padding:20px}
-h1{margin-bottom:20px}
-.kpi{display:inline-block;background:#fff;border:1px solid #ddd;border-radius:10px;padding:20px;margin:10px;min-width:120px;text-align:center}
-.kpi h2{margin:0;font-size:28px}
-</style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      font-size:14px;
+    }
+
+    .app{min-height:100vh}
+    #mainNav{
+      background:var(--accent);
+      padding:0 16px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      height:74px;
+      overflow-x:auto;
+    }
+
+    .logo{
+      color:#fff;
+      font-weight:800;
+      font-size:20px;
+      white-space:nowrap;
+      margin-right:20px;
+    }
+
+    .nav-tab{
+      background:none;
+      border:none;
+      color:rgba(255,255,255,.75);
+      padding:14px 18px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .nav-tab.on{
+      color:#fff;
+      background:rgba(255,255,255,.14);
+    }
+
+    #mainContent{
+      padding:28px 30px 40px;
+      max-width:1920px;
+      margin:0 auto;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:22px;
+      flex-wrap:wrap;
+    }
+
+    h1{
+      font-size:28px;
+      font-weight:800;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 16px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-size:13px;
+      font-weight:700;
+      color:var(--text);
+    }
+
+    .btn-dark{
+      background:var(--accent);
+      color:#fff;
+      border-color:var(--accent);
+    }
+
+    .kpi-row{
+      display:grid;
+      grid-template-columns:repeat(6,minmax(180px,1fr));
+      gap:18px;
+      margin-bottom:30px;
+    }
+
+    .kpi{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      min-height:158px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px;
+    }
+
+    .kpi-val{
+      font-size:38px;
+      line-height:1;
+      font-weight:900;
+      margin-bottom:12px;
+    }
+
+    .kpi-label{
+      font-size:16px;
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:30px;
+      margin-bottom:18px;
+    }
+
+    .card-title{
+      font-size:18px;
+      font-weight:800;
+      color:var(--muted);
+      margin-bottom:22px;
+      text-transform:uppercase;
+      letter-spacing:.3px;
+    }
+
+    .actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .empty{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.6;
+    }
+
+    .tbl-wrap{
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:#fff;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:900px;
+      background:#fff;
+    }
+
+    th{
+      text-align:left;
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      background:#faf9f7;
+    }
+
+    td{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      vertical-align:top;
+    }
+
+    tr:last-child td{border-bottom:none}
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:5px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .green{background:rgba(16,185,129,.12);color:var(--green)}
+    .blue{background:rgba(59,130,246,.12);color:var(--blue)}
+    .purple{background:rgba(139,92,246,.12);color:var(--purple)}
+    .yellow{background:rgba(245,158,11,.12);color:var(--yellow)}
+    .red{background:rgba(239,68,68,.12);color:var(--red)}
+    .gray{background:#F3F4F6;color:#4B5563}
+
+    .muted{color:var(--muted)}
+    .strong{font-weight:800}
+
+    .loader{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .error{
+      color:var(--red);
+      font-weight:700;
+    }
+
+    @media (max-width:1400px){
+      .kpi-row{grid-template-columns:repeat(3,minmax(180px,1fr))}
+    }
+
+    @media (max-width:860px){
+      #mainContent{padding:18px}
+      .kpi-row{grid-template-columns:repeat(2,minmax(140px,1fr))}
+      h1{font-size:24px}
+    }
+
+    @media (max-width:560px){
+      .kpi-row{grid-template-columns:1fr}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <nav id="mainNav">
+      <div class="logo">PRO KICKS</div>
+      <button class="nav-tab on" data-tab="dashboard">Dashboard</button>
+      <button class="nav-tab" data-tab="crm">CRM Leads</button>
+      <button class="nav-tab" data-tab="pipeline">Pipeline</button>
+      <button class="nav-tab" data-tab="comodatos">Comodatos</button>
+      <button class="nav-tab" data-tab="cobranza">Cobranza</button>
+    </nav>
 
-<h1>PRO KICKS Dashboard</h1>
+    <div id="mainContent"></div>
+  </div>
 
-<div id="kpis"></div>
+  <script>
+    const SHEET_ID = "1Ctv4JwJDc8MnIjp4B6_ekYI0WjqMgprPOB0ceh9lEAs";
+    const GIDS = {
+      dashboard: "331472093",
+      pipeline: "2026795846",
+      comodatos: "231746842",
+      cobranza: "235277202"
+    };
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx-0yjy3y6cg_f9sqEb35MN1UkKuWYD7UZkVdSyjmxxSnx-oKsvADbL0U3whtuRh7vEZg/exec";
 
-<script>
+    let currentTab = "dashboard";
+    let dashboardData = {
+      cerradas: "--",
+      prospeccion: 0,
+      comodato: 0,
+      totalDevices: 0,
+      producidos: 0,
+      redwood: 0
+    };
+    let crmLeads = [];
+    let pipelineRows = [];
+    let comodatoRows = [];
+    let cobranzaRows = [];
 
-var SID = "1Ctv4JwJDc8MnIjp4B6_ekYI0WjqMgprPOB0ceh9lEAs";
-var GID = "331472093";
+    function csvUrl(gid){
+      return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}&t=${Date.now()}`;
+    }
 
-async function cargar(){
-  try{
-    var url = "https://docs.google.com/spreadsheets/d/"+SID+"/export?format=csv&gid="+GID+"&t="+Date.now();
+    async function fetchCSV(gid){
+      const res = await fetch(csvUrl(gid), { cache: "no-store" });
+      if(!res.ok) throw new Error(`Error ${res.status} cargando CSV`);
+      return await res.text();
+    }
 
-    var res = await fetch(url);
-    var txt = await res.text();
+    function parseCSV(text){
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let inQuotes = false;
 
-    var rows = txt.split("\n").map(r=>r.split(","));
+      for(let i=0;i<text.length;i++){
+        const ch = text[i];
+        const next = text[i+1];
 
-    // buscamos fila con datos (la 5 normalmente)
-    var data = rows[4];
+        if(ch === '"'){
+          if(inQuotes && next === '"'){
+            cell += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if(ch === ',' && !inQuotes){
+          row.push(cell.trim());
+          cell = "";
+        } else if((ch === '\n' || ch === '\r') && !inQuotes){
+          if(ch === '\r' && next === '\n') i++;
+          row.push(cell.trim());
+          rows.push(row);
+          row = [];
+          cell = "";
+        } else {
+          cell += ch;
+        }
+      }
 
-    var cerradas = parseInt(data[1])||0;
-    var incompletas = parseInt(data[2])||0;
-    var prospeccion = parseInt(data[3])||0;
-    var comodato = parseInt(data[4])||0;
-    var total = parseInt(data[5])||0;
+      if(cell.length || row.length){
+        row.push(cell.trim());
+        rows.push(row);
+      }
 
-    document.getElementById("kpis").innerHTML = `
-      <div class="kpi"><h2>${cerradas}</h2>Ventas Cerradas</div>
-      <div class="kpi"><h2>${prospeccion}</h2>Prospección</div>
-      <div class="kpi"><h2>${comodato}</h2>Comodato</div>
-      <div class="kpi"><h2>${total}</h2>Total Devices</div>
-    `;
+      return rows;
+    }
 
-  }catch(e){
-    document.body.innerHTML = "Error cargando datos";
-    console.error(e);
-  }
-}
+    function normalize(s){
+      return String(s || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toUpperCase();
+    }
 
-cargar();
+    function toNumber(v){
+      const n = String(v || "")
+        .replace(/\$/g, "")
+        .replace(/\s/g, "")
+        .replace(/\.(?=\d{3})/g, "")
+        .replace(/,/g, ".");
+      return Number(n) || 0;
+    }
 
-</script>
+    function money(v){
+      const n = toNumber(v);
+      if(!n) return "--";
+      return "$" + n.toLocaleString("es-MX");
+    }
 
+    function findRowWithHeaders(rows, headerNames){
+      const normalizedHeaders = headerNames.map(normalize);
+      for(let i=0;i<Math.min(rows.length, 20);i++){
+        const score = rows[i].reduce((acc, cell) => {
+          return acc + (normalizedHeaders.includes(normalize(cell)) ? 1 : 0);
+        }, 0);
+        if(score >= 2) return i;
+      }
+      return -1;
+    }
+
+    function headerIndex(headers, variants){
+      const n = headers.map(normalize);
+      for(const v of variants){
+        const idx = n.indexOf(normalize(v));
+        if(idx >= 0) return idx;
+      }
+      return -1;
+    }
+
+    function parseDashboardRows(rows){
+      let found = null;
+
+      for(const row of rows){
+        const nums = row.map(x => toNumber(x)).filter(x => !isNaN(x) && x !== 0);
+        if(nums.length >= 5){
+          found = row;
+          break;
+        }
+      }
+
+      if(!found){
+        return {
+          cerradas: "--",
+          prospeccion: 0,
+          comodato: 0,
+          totalDevices: 0,
+          producidos: 0,
+          redwood: 0
+        };
+      }
+
+      return {
+        cerradas: toNumber(found[1]) || "--",
+        prospeccion: toNumber(found[3]) || 0,
+        comodato: toNumber(found[4]) || 0,
+        totalDevices: toNumber(found[5]) || 0,
+        producidos: toNumber(found[6]) || 0,
+        redwood: toNumber(found[7]) || 0
+      };
+    }
+
+    function parsePipelineRows(rows){
+      const hr = findRowWithHeaders(rows, [
+        "CLIENTE / CLUB","CONTACTO","REP","DEVICES","MONTO",
+        "ESTADO VENTA","ESTADO PAGO","SALDO PEND.","ENTREGA","F. ENTREGA","CIUDAD","NOTAS"
+      ]);
+      if(hr < 0) return [];
+
+      const h = rows[hr];
+      return rows.slice(hr + 1)
+        .filter(r => {
+          const idx = headerIndex(h, ["CLIENTE / CLUB", "CLIENTE"]);
+          return idx >= 0 && String(r[idx] || "").trim() !== "";
+        })
+        .map(r => ({
+          cliente: r[headerIndex(h, ["CLIENTE / CLUB", "CLIENTE"])] || "",
+          contacto: r[headerIndex(h, ["CONTACTO"])] || "",
+          rep: r[headerIndex(h, ["REP"])] || "",
+          devices: r[headerIndex(h, ["DEVICES"])] || "",
+          monto: r[headerIndex(h, ["MONTO", "MONTO TOTAL"])] || "",
+          estadoVenta: r[headerIndex(h, ["ESTADO VENTA", "ESTADO"])] || "",
+          estadoPago: r[headerIndex(h, ["ESTADO PAGO", "PAGO"])] || "",
+          saldo: r[headerIndex(h, ["SALDO PEND.", "SALDO"])] || "",
+          entrega: r[headerIndex(h, ["ENTREGA"])] || "",
+          fechaEntrega: r[headerIndex(h, ["F. ENTREGA", "FECHA ENTREGA"])] || "",
+          ciudad: r[headerIndex(h, ["CIUDAD"])] || "",
+          notas: r[headerIndex(h, ["NOTAS"])] || ""
+        }));
+    }
+
+    function parseComodatoRows(rows){
+      const hr = findRowWithHeaders(rows, [
+        "CLIENTE / CLUB","CONTACTO","REP","DEVICES","ESTADO","F. ENTREGA","CIUDAD"
+      ]);
+      if(hr < 0) return [];
+
+      const h = rows[hr];
+      return rows.slice(hr + 1)
+        .filter(r => {
+          const idx = headerIndex(h, ["CLIENTE / CLUB", "CLIENTE"]);
+          return idx >= 0 && String(r[idx] || "").trim() !== "";
+        })
+        .map(r => ({
+          cliente: r[headerIndex(h, ["CLIENTE / CLUB", "CLIENTE"])] || "",
+          contacto: r[headerIndex(h, ["CONTACTO"])] || "",
+          rep: r[headerIndex(h, ["REP"])] || "",
+          devices: r[headerIndex(h, ["DEVICES"])] || "",
+          estado: r[headerIndex(h, ["ESTADO"])] || "",
+          fechaEntrega: r[headerIndex(h, ["F. ENTREGA", "FECHA ENTREGA"])] || "",
+          ciudad: r[headerIndex(h, ["CIUDAD"])] || ""
+        }));
+    }
+
+    function parseCobranzaRows(rows){
+      const hr = findRowWithHeaders(rows, [
+        "CLIENTE","REP","MONTO TOTAL","SALDO PEND.","ESTADO","ACCION","ACCIÓN"
+      ]);
+      if(hr < 0) return [];
+
+      const h = rows[hr];
+      return rows.slice(hr + 1)
+        .filter(r => {
+          const idx = headerIndex(h, ["CLIENTE"]);
+          const val = String((idx >= 0 ? r[idx] : "") || "").trim();
+          return val !== "" && !normalize(val).includes("TOTAL");
+        })
+        .map(r => ({
+          cliente: r[headerIndex(h, ["CLIENTE"])] || "",
+          rep: r[headerIndex(h, ["REP"])] || "",
+          monto: r[headerIndex(h, ["MONTO TOTAL", "MONTO"])] || "",
+          saldo: r[headerIndex(h, ["SALDO PEND.", "SALDO"])] || "",
+          estado: r[headerIndex(h, ["ESTADO"])] || "",
+          accion: r[headerIndex(h, ["ACCIÓN", "ACCION"])] || ""
+        }));
+    }
+
+    async function loadDashboard(){
+      const txt = await fetchCSV(GIDS.dashboard);
+      const rows = parseCSV(txt);
+      dashboardData = parseDashboardRows(rows);
+    }
+
+    async function loadPipeline(){
+      const txt = await fetchCSV(GIDS.pipeline);
+      pipelineRows = parsePipelineRows(parseCSV(txt));
+    }
+
+    async function loadComodatos(){
+      const txt = await fetchCSV(GIDS.comodatos);
+      comodatoRows = parseComodatoRows(parseCSV(txt));
+    }
+
+    async function loadCobranza(){
+      const txt = await fetchCSV(GIDS.cobranza);
+      cobranzaRows = parseCobranzaRows(parseCSV(txt));
+    }
+
+    async function loadCRM(){
+      try{
+        const res = await fetch(APPS_SCRIPT_URL + "?action=leads", { cache:"no-store" });
+        const data = await res.json();
+        crmLeads = Array.isArray(data.leads) ? data.leads : [];
+      }catch(e){
+        crmLeads = [];
+      }
+    }
+
+    function badgeForValue(value){
+      const v = normalize(value);
+
+      if(v === "PAGADO" || v === "ENTREGADO" || v === "CERRADO" || v === "DEVUELTO"){
+        return `<span class="badge green">${value || "--"}</span>`;
+      }
+      if(v === "PENDIENTE"){
+        return `<span class="badge yellow">${value || "--"}</span>`;
+      }
+      if(v === "ENVIADO" || v === "EN USO" || v === "CONTACTADO"){
+        return `<span class="badge blue">${value || "--"}</span>`;
+      }
+      if(v === "NUEVO" || v === "PROPUESTA" || v === "NEGOCIACION" || v === "NEGOCIACIÓN"){
+        return `<span class="badge purple">${value || "--"}</span>`;
+      }
+      if(v === "PERDIDO" || v === "NO ENVIADO"){
+        return `<span class="badge red">${value || "--"}</span>`;
+      }
+
+      return `<span class="badge gray">${value || "--"}</span>`;
+    }
+
+    function renderDashboard(){
+      return `
+        <div class="topbar">
+          <h1>Dashboard</h1>
+          <button class="btn" id="refreshBtn">↻ Actualizar</button>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="kpi-val" style="color:var(--green)">${dashboardData.cerradas}</div>
+            <div class="kpi-label">Ventas Cerradas</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val" style="color:var(--blue)">${dashboardData.prospeccion}</div>
+            <div class="kpi-label">Prospección</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val" style="color:var(--purple)">${dashboardData.comodato}</div>
+            <div class="kpi-label">Comodato</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val" style="color:var(--yellow)">${dashboardData.totalDevices}</div>
+            <div class="kpi-label">Total Devices</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val" style="color:#0F172A">${dashboardData.producidos}</div>
+            <div class="kpi-label">Producidos</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val" style="color:var(--red)">${dashboardData.redwood}</div>
+            <div class="kpi-label">Redwood</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">CRM Leads Rápido</div>
+          <div class="actions">
+            <button class="btn btn-dark" data-tab-go="crm">Ver CRM</button>
+            <button class="btn">+ Nuevo Lead</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCRM(){
+      const rows = crmLeads.map(l => `
+        <tr>
+          <td class="strong">${l.nombre || "--"}</td>
+          <td>${l.empresa || "--"}</td>
+          <td>${l.rep || "--"}</td>
+          <td>${badgeForValue(l.stage || "Nuevo")}</td>
+          <td>${l.tel || "--"}</td>
+          <td>${l.email || "--"}</td>
+        </tr>
+      `).join("");
+
+      return `
+        <div class="topbar">
+          <h1>CRM Leads</h1>
+          <button class="btn" id="refreshBtn">↻ Actualizar</button>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Empresa</th>
+                <th>Rep</th>
+                <th>Stage</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows || `<tr><td colspan="6" class="empty">Sin leads disponibles.</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderPipeline(){
+      const rows = pipelineRows.map(r => `
+        <tr>
+          <td class="strong">${r.cliente || "--"}</td>
+          <td>${r.contacto || "--"}</td>
+          <td>${r.rep || "--"}</td>
+          <td>${r.devices || "--"}</td>
+          <td>${badgeForValue(r.estadoVenta || "--")}</td>
+          <td>${badgeForValue(r.estadoPago || "--")}</td>
+          <td>${money(r.saldo)}</td>
+          <td>${r.fechaEntrega || "--"}</td>
+          <td>${r.ciudad || "--"}</td>
+        </tr>
+      `).join("");
+
+      return `
+        <div class="topbar">
+          <h1>Pipeline</h1>
+          <button class="btn" id="refreshBtn">↻ Actualizar</button>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Contacto</th>
+                <th>Rep</th>
+                <th>Devices</th>
+                <th>Status Venta</th>
+                <th>Status Pago</th>
+                <th>Saldo</th>
+                <th>Entrega</th>
+                <th>Ciudad</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows || `<tr><td colspan="9" class="empty">Sin registros.</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderComodatos(){
+      const rows = comodatoRows.map(r => `
+        <tr>
+          <td class="strong">${r.cliente || "--"}</td>
+          <td>${r.contacto || "--"}</td>
+          <td>${r.rep || "--"}</td>
+          <td>${r.devices || "--"}</td>
+          <td>${badgeForValue(r.estado || "--")}</td>
+          <td>${r.fechaEntrega || "--"}</td>
+          <td>${r.ciudad || "--"}</td>
+        </tr>
+      `).join("");
+
+      return `
+        <div class="topbar">
+          <h1>Comodatos</h1>
+          <button class="btn" id="refreshBtn">↻ Actualizar</button>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Contacto</th>
+                <th>Rep</th>
+                <th>Devices</th>
+                <th>Status</th>
+                <th>Entrega</th>
+                <th>Ciudad</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows || `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderCobranza(){
+      const rows = cobranzaRows.map(r => `
+        <tr>
+          <td class="strong">${r.cliente || "--"}</td>
+          <td>${r.rep || "--"}</td>
+          <td>${money(r.monto)}</td>
+          <td>${money(r.saldo)}</td>
+          <td>${badgeForValue(r.estado || "--")}</td>
+          <td>${r.accion || "--"}</td>
+        </tr>
+      `).join("");
+
+      return `
+        <div class="topbar">
+          <h1>Cobranza</h1>
+          <button class="btn" id="refreshBtn">↻ Actualizar</button>
+        </div>
+
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Rep</th>
+                <th>Monto Total</th>
+                <th>Saldo Pendiente</th>
+                <th>Status</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows || `<tr><td colspan="6" class="empty">Sin registros.</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderLoading(){
+      document.getElementById("mainContent").innerHTML = `
+        <div class="topbar">
+          <h1>${currentTab.charAt(0).toUpperCase() + currentTab.slice(1)}</h1>
+        </div>
+        <div class="card">
+          <div class="loader">Cargando información...</div>
+        </div>
+      `;
+    }
+
+    function renderError(msg){
+      document.getElementById("mainContent").innerHTML = `
+        <div class="topbar">
+          <h1>Error</h1>
+        </div>
+        <div class="card">
+          <div class="error">${msg}</div>
+        </div>
+      `;
+    }
+
+    function render(){
+      const content = document.getElementById("mainContent");
+      if(currentTab === "dashboard") content.innerHTML = renderDashboard();
+      if(currentTab === "crm") content.innerHTML = renderCRM();
+      if(currentTab === "pipeline") content.innerHTML = renderPipeline();
+      if(currentTab === "comodatos") content.innerHTML = renderComodatos();
+      if(currentTab === "cobranza") content.innerHTML = renderCobranza();
+
+      const refreshBtn = document.getElementById("refreshBtn");
+      if(refreshBtn){
+        refreshBtn.addEventListener("click", () => loadCurrentTab());
+      }
+
+      document.querySelectorAll("[data-tab-go]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          currentTab = btn.getAttribute("data-tab-go");
+          syncNav();
+          loadCurrentTab();
+        });
+      });
+    }
+
+    function syncNav(){
+      document.querySelectorAll(".nav-tab").forEach(btn => {
+        btn.classList.toggle("on", btn.getAttribute("data-tab") === currentTab);
+      });
+    }
+
+    async function loadCurrentTab(){
+      try{
+        renderLoading();
+
+        if(currentTab === "dashboard") await loadDashboard();
+        if(currentTab === "crm") await loadCRM();
+        if(currentTab === "pipeline") await loadPipeline();
+        if(currentTab === "comodatos") await loadComodatos();
+        if(currentTab === "cobranza") await loadCobranza();
+
+        render();
+      }catch(e){
+        console.error(e);
+        renderError("No se pudo cargar la información. Recarga la página.");
+      }
+    }
+
+    document.querySelectorAll(".nav-tab").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentTab = btn.getAttribute("data-tab");
+        syncNav();
+        loadCurrentTab();
+      });
+    });
+
+    syncNav();
+    loadCurrentTab();
+  </script>
 </body>
 </html>
