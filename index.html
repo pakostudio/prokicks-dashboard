@@ -745,9 +745,7 @@
       });
 
       if (!res.ok) throw new Error("No se pudo leer la API");
-
-      const json = await res.json();
-      return json;
+      return await res.json();
     }
 
     async function apiPost(payload){
@@ -772,8 +770,7 @@
       root.innerHTML = `<div class="panel"><div class="empty">Cargando información...</div></div>`;
 
       try{
-        const freshData = await apiGetAll();
-        data = freshData;
+        data = await apiGetAll();
         render();
         if (showToast) toast("Información actualizada");
       }catch(e){
