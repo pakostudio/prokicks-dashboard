@@ -698,8 +698,7 @@
     }
 
     async function apiGetAll(){
-      const sep = API.includes("?") ? "&" : "?";
-      const res = await fetch(`${API}${sep}t=${Date.now()}`, { cache:"no-store" });
+      const res = await fetch(API, { cache:"no-store" });
       if (!res.ok) throw new Error("No se pudo leer la API");
       return await res.json();
     }
@@ -719,75 +718,12 @@
         data = await apiGetAll();
         render();
       }catch(e){
-        console.error("Error cargando app:", e);
         root.innerHTML = `<div class="panel"><div class="empty">No se pudo cargar la información.</div></div>`;
       }
     }
 
     function renderDashboard(){
-      const raw = data.dashboard || {};
-
-      const d = {
-        cerradas:
-          raw.cerradas ??
-          raw.Cerradas ??
-          raw.ventasCerradas ??
-          raw.ventas_cerradas ??
-          0,
-
-        incompletas:
-          raw.incompletas ??
-          raw.Incompletas ??
-          raw.ventasIncompletas ??
-          raw.ventas_incompletas ??
-          0,
-
-        prospeccion:
-          raw.prospeccion ??
-          raw.Prospeccion ??
-          raw.prospecting ??
-          raw.pipelineProspeccion ??
-          0,
-
-        comodato:
-          raw.comodato ??
-          raw.Comodato ??
-          raw.enComodato ??
-          raw.inventarioEnUso ??
-          0,
-
-        totalDevices:
-          raw.totalDevices ??
-          raw.totaldevices ??
-          raw.total_devices ??
-          raw.devicesTotales ??
-          raw.devices ??
-          0,
-
-        producidos:
-          raw.producidos ??
-          raw.Producidos ??
-          raw.totalProducidos ??
-          0,
-
-        redwood:
-          raw.redwood ??
-          raw.Redwood ??
-          raw.inventarioRedwood ??
-          raw.inventario_redwood ??
-          raw.redwoodInventario ??
-          raw["Inventario Redwood"] ??
-          raw["inventario redwood"] ??
-          0,
-
-        diferencia:
-          raw.diferencia ??
-          raw.Diferencia ??
-          raw.delta ??
-          raw.diferenciaInventario ??
-          0
-      };
-
+      const d = data.dashboard || {};
       const pipeline = normalizePipelineRows(data.pipeline);
       const comodatos = cleanComodatos(data.comodatos);
       const cobranza = cleanCobranza(data.cobranza);
@@ -797,27 +733,27 @@
         <div class="kpis">
           <div class="kpi">
             <div class="kpi-label">Ventas cerradas</div>
-            <div class="kpi-value">${d.cerradas}</div>
+            <div class="kpi-value">${d.cerradas ?? 0}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">Ventas incompletas</div>
-            <div class="kpi-value">${d.incompletas}</div>
+            <div class="kpi-value">${d.incompletas ?? 0}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">Prospección</div>
-            <div class="kpi-value">${d.prospeccion}</div>
+            <div class="kpi-value">${d.prospeccion ?? 0}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">En comodato</div>
-            <div class="kpi-value">${d.comodato}</div>
+            <div class="kpi-value">${d.comodato ?? 0}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">Total devices</div>
-            <div class="kpi-value">${d.totalDevices}</div>
+            <div class="kpi-value">${d.totalDevices ?? 0}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">Inventario Redwood</div>
-            <div class="kpi-value">${d.redwood}</div>
+            <div class="kpi-value">${d.redwood ?? 0}</div>
           </div>
         </div>
 
@@ -840,14 +776,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td class="name">Ventas cerradas</td><td>${d.cerradas}</td></tr>
-                  <tr><td class="name">Ventas incompletas</td><td>${d.incompletas}</td></tr>
-                  <tr><td class="name">Prospección</td><td>${d.prospeccion}</td></tr>
-                  <tr><td class="name">En comodato</td><td>${d.comodato}</td></tr>
-                  <tr><td class="name">Total devices</td><td>${d.totalDevices}</td></tr>
-                  <tr><td class="name">Producidos</td><td>${d.producidos}</td></tr>
-                  <tr><td class="name">Inventario Redwood</td><td>${d.redwood}</td></tr>
-                  <tr><td class="name">Diferencia</td><td>${d.diferencia}</td></tr>
+                  <tr><td class="name">Ventas cerradas</td><td>${d.cerradas ?? 0}</td></tr>
+                  <tr><td class="name">Ventas incompletas</td><td>${d.incompletas ?? 0}</td></tr>
+                  <tr><td class="name">Prospección</td><td>${d.prospeccion ?? 0}</td></tr>
+                  <tr><td class="name">En comodato</td><td>${d.comodato ?? 0}</td></tr>
+                  <tr><td class="name">Total devices</td><td>${d.totalDevices ?? 0}</td></tr>
+                  <tr><td class="name">Producidos</td><td>${d.producidos ?? 0}</td></tr>
+                  <tr><td class="name">Inventario Redwood</td><td>${d.redwood ?? 0}</td></tr>
+                  <tr><td class="name">Diferencia</td><td>${d.diferencia ?? 0}</td></tr>
                 </tbody>
               </table>
             </div>
@@ -856,7 +792,7 @@
           <div class="summary-list">
             <div class="summary-item">
               <strong>Inventario Redwood</strong>
-              <span>${d.redwood}</span>
+              <span>${d.redwood ?? 0}</span>
             </div>
             <div class="summary-item">
               <strong>Control</strong>
@@ -864,7 +800,7 @@
             </div>
             <div class="summary-item">
               <strong>Diferencia</strong>
-              <span>${d.diferencia}</span>
+              <span>${d.diferencia ?? 0}</span>
             </div>
             <div class="summary-item">
               <strong>Acción rápida</strong>
