@@ -1,1278 +1,669 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRO KICKS INVENTARIO</title>
-  <style>
-    :root{
-      --bg:#f7f8fb;
-      --bg-soft:#fff8f2;
-      --panel:#ffffff;
-      --panel-2:#fffaf5;
-      --line:#e8e1d9;
-      --text:#1f2430;
-      --muted:#7b8190;
-
-      --accent:#ef8f1a;
-      --accent-2:#ffab3d;
-      --accent-soft:#fff1dd;
-      --accent-dark:#a85d00;
-
-      --green:#1f9d55;
-      --green-bg:#e8f8ef;
-
-      --yellow:#b7791f;
-      --yellow-bg:#fff7df;
-
-      --red:#c53030;
-      --red-bg:#fdecec;
-
-      --blue:#2b6cb0;
-      --blue-bg:#e8f1ff;
-
-      --gray:#64748b;
-      --gray-bg:#f1f5f9;
-
-      --shadow:0 14px 34px rgba(18, 24, 33, .08);
-      --radius:20px;
-    }
-
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    body{
-      font-family: Inter, Arial, Helvetica, sans-serif;
-      background:linear-gradient(180deg,var(--bg) 0%, #f2f4f8 100%);
-      color:var(--text);
-    }
-
-    .app{
-      max-width: 1660px;
-      margin: 0 auto;
-      padding: 18px 18px 28px;
-    }
-
-    .hero{
-      background:linear-gradient(135deg,#ffffff 0%, var(--bg-soft) 100%);
-      border:1px solid #f0dfcb;
-      border-radius:28px;
-      padding:20px 20px 16px;
-      box-shadow:var(--shadow);
-      margin-bottom:18px;
-    }
-
-    .hero-top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      flex-wrap:wrap;
-    }
-
-    .eyebrow{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      color:var(--muted);
-      font-weight:800;
-      margin-bottom:6px;
-    }
-
-    .title{
-      margin:0;
-      font-size: clamp(26px, 4vw, 40px);
-      line-height:1;
-      font-weight:900;
-      color:#20242c;
-    }
-
-    .subtitle{
-      margin:8px 0 0;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .hero-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .btn{
-      border:none;
-      cursor:pointer;
-      border-radius:14px;
-      padding:10px 14px;
-      font-size:12px;
-      font-weight:800;
-      transition:.18s ease;
-    }
-
-    .btn:hover{transform:translateY(-1px)}
-
-    .btn-primary{
-      background:var(--accent);
-      color:#fff;
-    }
-
-    .btn-primary:hover{
-      background:var(--accent-2);
-    }
-
-    .btn-secondary{
-      background:#fff;
-      color:var(--text);
-      border:1px solid var(--line);
-    }
-
-    .btn-danger{
-      background:var(--red);
-      color:#fff;
-    }
-
-    .btn-soft{
-      background:var(--accent-soft);
-      color:var(--accent-dark);
-      border:1px solid #f2cf9d;
-    }
-
-    .tabs{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:16px;
-    }
-
-    .tab{
-      border:none;
-      cursor:pointer;
-      border-radius:14px;
-      padding:10px 14px;
-      font-size:12px;
-      font-weight:800;
-      background:#fff;
-      color:var(--muted);
-      border:1px solid var(--line);
-    }
-
-    .tab.active{
-      background:var(--accent);
-      color:#fff;
-      border-color:var(--accent);
-    }
-
-    .kpis{
-      display:grid;
-      grid-template-columns:repeat(6,minmax(0,1fr));
-      gap:14px;
-      margin-bottom:16px;
-    }
-
-    .kpi{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      padding:14px 14px 12px;
-      min-height:108px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
-
-    .kpi-label{
-      font-size:10px;
-      line-height:1.2;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:var(--muted);
-      font-weight:800;
-      max-width:130px;
-    }
-
-    .kpi-value{
-      font-size:32px;
-      line-height:1;
-      font-weight:900;
-      color:#232832;
-    }
-
-    .panel{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
-
-    .panel-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
-    }
-
-    .panel-title{
-      margin:0;
-      font-size:21px;
-      line-height:1;
-      font-weight:900;
-      color:#232832;
-    }
-
-    .panel-subtitle{
-      margin:6px 0 0;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .meta-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 12px;
-      border-radius:999px;
-      background:#fffaf5;
-      border:1px solid var(--line);
-      color:#8c6b43;
-      font-size:11px;
-      font-weight:800;
-    }
-
-    .two-col{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:16px;
-    }
-
-    .table-wrap{
-      overflow:auto;
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#fff;
-    }
-
-    table{
-      width:100%;
-      min-width:1400px;
-      border-collapse:collapse;
-    }
-
-    th{
-      text-align:left;
-      padding:11px 12px;
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:var(--muted);
-      background:#fffaf5;
-      border-bottom:1px solid var(--line);
-      position:sticky;
-      top:0;
-      z-index:1;
-      white-space:nowrap;
-    }
-
-    td{
-      padding:11px 12px;
-      border-bottom:1px solid var(--line);
-      font-size:12px;
-      color:#2a3140;
-      vertical-align:middle;
-      white-space:nowrap;
-    }
-
-    td.wrap{
-      white-space:normal;
-      min-width:220px;
-    }
-
-    tr:last-child td{border-bottom:none}
-    tr:hover td{background:#fffdf9}
-
-    .name{
-      font-weight:900;
-      color:#20242c;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      white-space:nowrap;
-      border-radius:999px;
-      padding:5px 9px;
-      font-size:10px;
-      font-weight:900;
-    }
-
-    .b-green{background:var(--green-bg); color:var(--green)}
-    .b-yellow{background:var(--yellow-bg); color:var(--yellow)}
-    .b-red{background:var(--red-bg); color:var(--red)}
-    .b-blue{background:var(--blue-bg); color:var(--blue)}
-    .b-gray{background:var(--gray-bg); color:var(--gray)}
-
-    .summary-list{
-      display:grid;
-      gap:12px;
-    }
-
-    .summary-item{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:14px;
-      background:var(--panel-2);
-    }
-
-    .summary-item strong{
-      display:block;
-      color:var(--text);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      margin-bottom:6px;
-    }
-
-    .summary-item span{
-      display:block;
-      font-size:18px;
-      font-weight:900;
-      color:#232832;
-    }
-
-    .crm-grid{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:14px;
-    }
-
-    .crm-card{
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:#fff;
-      padding:14px;
-      box-shadow:var(--shadow);
-    }
-
-    .crm-name{
-      margin:0 0 4px;
-      font-size:17px;
-      font-weight:900;
-      color:#232832;
-    }
-
-    .crm-company{
-      margin:0 0 12px;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .crm-meta{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-      margin-bottom:12px;
-    }
-
-    .crm-box{
-      background:#fffaf5;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:9px 10px;
-    }
-
-    .crm-box strong{
-      display:block;
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:var(--muted);
-      margin-bottom:5px;
-    }
-
-    .crm-box span{
-      display:block;
-      font-size:11px;
-      color:#2a3140;
-      word-break:break-word;
-    }
-
-    .card-actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .empty{
-      padding:30px 12px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-      font-weight:800;
-    }
-
-    .modal-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(30, 36, 44, .25);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      z-index:999;
-    }
-
-    .modal-overlay.open{display:flex}
-
-    .modal{
-      width:720px;
-      max-width:100%;
-      max-height:90vh;
-      overflow:auto;
-      background:#fff;
-      border-radius:24px;
-      box-shadow:0 20px 50px rgba(0,0,0,.15);
-      border:1px solid var(--line);
-      padding:18px;
-    }
-
-    .modal-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:12px;
-      margin-bottom:14px;
-    }
-
-    .modal-title{
-      margin:0;
-      font-size:21px;
-      font-weight:900;
-      color:#232832;
-    }
-
-    .modal-sub{
-      margin:6px 0 0;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    .close{
-      border:none;
-      background:var(--accent-soft);
-      color:var(--accent-dark);
-      width:38px;
-      height:38px;
-      border-radius:12px;
-      cursor:pointer;
-      font-size:18px;
-      font-weight:900;
-    }
-
-    .form-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-      margin-bottom:12px;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
-    .field.full{grid-column:1 / -1}
-
-    .field label{
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:var(--muted);
-      font-weight:800;
-    }
-
-    .field input,
-    .field select,
-    .field textarea{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 11px;
-      font-size:12px;
-      font-family:inherit;
-      color:#2a3140;
-      background:#fff;
-      outline:none;
-    }
-
-    .field textarea{
-      resize:vertical;
-      min-height:88px;
-    }
-
-    .modal-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:8px;
-    }
-
-    #toast{
-      position:fixed;
-      right:18px;
-      bottom:18px;
-      z-index:1000;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .toast-item{
-      background:#232832;
-      color:#fff;
-      padding:12px 14px;
-      border-radius:12px;
-      font-size:12px;
-      font-weight:800;
-      box-shadow:var(--shadow);
-    }
-
-    @media (max-width: 1260px){
-      .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
-      .crm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .two-col{grid-template-columns:1fr}
-    }
-
-    @media (max-width: 780px){
-      .app{padding:14px}
-      .hero{padding:16px}
-      .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .crm-grid{grid-template-columns:1fr}
-      .form-grid{grid-template-columns:1fr}
-      .panel-title{font-size:19px}
-    }
-
-    @media (max-width: 520px){
-      .kpis{grid-template-columns:1fr}
-      .tab{flex:1}
-      .btn{width:100%}
-      .hero-actions{width:100%}
-    }
-  </style>
-</head>
-<body>
-  <div class="app">
-    <section class="hero">
-      <div class="hero-top">
-        <div>
-          <div class="eyebrow">Sistema operativo comercial</div>
-          <h1 class="title">PRO KICKS INVENTARIO</h1>
-          <p class="subtitle">Dashboard, ventas, inventario en uso, cobranza y CRM.</p>
-        </div>
-
-        <div class="hero-actions">
-          <button class="btn btn-primary" onclick="openLeadModal()">+ Nuevo lead</button>
-          <button class="btn btn-secondary" onclick="load(true)">Actualizar</button>
-        </div>
-      </div>
-
-      <div class="tabs">
-        <button class="tab active" id="tab-dashboard" onclick="setTab('dashboard')">Dashboard</button>
-        <button class="tab" id="tab-pipeline" onclick="setTab('pipeline')">Ventas</button>
-        <button class="tab" id="tab-comodatos" onclick="setTab('comodatos')">Inventario en uso</button>
-        <button class="tab" id="tab-cobranza" onclick="setTab('cobranza')">Cobranza</button>
-        <button class="tab" id="tab-crm" onclick="setTab('crm')">CRM</button>
-      </div>
-    </section>
-
-    <div id="appContent"></div>
-  </div>
-
-  <div id="modalRoot"></div>
-  <div id="toast"></div>
-
-  <script>
-    const API = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
-
-    let data = {};
-    let currentTab = "dashboard";
-    let isLoading = false;
-
-    const STAGES = ["Nuevo","Contactado","Demo","Propuesta","Negociación","Cerrado","Perdido"];
-    const FUENTES = ["Referido","Instagram","Facebook","WhatsApp","Web","Evento","Otro"];
-    const REPS = ["Billy","Sean","Pako","Jonathan","Jorge","Juan","Fernando","LMS","Otro"];
-
-    function safeArray(v){
-      return Array.isArray(v) ? v : [];
-    }
-
-    function normalizeValue(v, fallback = 0){
-      if (v === null || v === undefined || v === "") return fallback;
-      return v;
-    }
-
-    function getFirst(obj, keys, fallback = 0){
-      for (const key of keys){
-        if (obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== ""){
-          return obj[key];
-        }
+<script>
+  const API = "https://script.google.com/macros/s/AKfycbwzzE4ESNn1-dQmlgupZhIrCCI76Skf5IWBAK61OhIv2hAZMbkepNB7O5cm7SGojr0kfg/exec";
+
+  let data = {};
+  let currentTab = "dashboard";
+  let isLoading = false;
+
+  const STAGES = ["Nuevo","Contactado","Demo","Propuesta","Negociación","Cerrado","Perdido"];
+  const FUENTES = ["Referido","Instagram","Facebook","WhatsApp","Web","Evento","Otro"];
+  const REPS = ["Billy","Sean","Pako","Jonathan","Jorge","Juan","Fernando","LMS","Otro"];
+
+  function safeArray(v){
+    return Array.isArray(v) ? v : [];
+  }
+
+  function normalizeValue(v, fallback = 0){
+    if (v === null || v === undefined || v === "") return fallback;
+    return v;
+  }
+
+  function getFirst(obj, keys, fallback = 0){
+    for (const key of keys){
+      if (obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== ""){
+        return obj[key];
       }
-      return fallback;
     }
+    return fallback;
+  }
 
-    function getDashboardMetrics(raw = {}){
-      return {
-        cerradas: getFirst(raw, ["cerradas","Cerradas","ventasCerradas","ventas_cerradas"], 0),
-        incompletas: getFirst(raw, ["incompletas","Incompletas","ventasIncompletas","ventas_incompletas"], 0),
-        prospeccion: getFirst(raw, ["prospeccion","Prospeccion","prospecting","pipelineProspeccion"], 0),
-        comodato: getFirst(raw, ["comodato","Comodato","enComodato","inventarioEnUso"], 0),
-        totalDevices: getFirst(raw, ["totalDevices","totaldevices","total_devices","devicesTotales","devices"], 0),
-        producidos: getFirst(raw, ["producidos","Producidos","totalProducidos"], 0),
-        redwood: getFirst(raw, [
-          "redwood",
-          "Redwood",
-          "inventarioRedwood",
-          "inventario_redwood",
-          "redwoodInventario",
-          "Inventario Redwood",
-          "inventario redwood"
-        ], 0),
-        diferencia: getFirst(raw, ["diferencia","Diferencia","delta","diferenciaInventario"], 0)
-      };
-    }
+  function getDashboardMetrics(raw = {}){
+    return {
+      cerradas: getFirst(raw, ["cerradas","Cerradas","ventasCerradas","ventas_cerradas"], 0),
+      incompletas: getFirst(raw, ["incompletas","Incompletas","ventasIncompletas","ventas_incompletas"], 0),
+      prospeccion: getFirst(raw, ["prospeccion","Prospeccion","prospecting","pipelineProspeccion"], 0),
+      comodato: getFirst(raw, ["comodato","Comodato","enComodato","inventarioEnUso"], 0),
+      totalDevices: getFirst(raw, ["totalDevices","totaldevices","total_devices","devicesTotales","devices"], 0),
+      producidos: getFirst(raw, ["producidos","Producidos","totalProducidos"], 0),
+      redwood: getFirst(raw, [
+        "redwood",
+        "Redwood",
+        "inventarioRedwood",
+        "inventario_redwood",
+        "redwoodInventario",
+        "Inventario Redwood",
+        "inventario redwood"
+      ], 0),
+      diferencia: getFirst(raw, ["diferencia","Diferencia","delta","diferenciaInventario"], 0)
+    };
+  }
 
-    function cleanCRM(leads){
-      return safeArray(leads).filter(l => {
-        const id = String(l.id || "").trim();
-        const nombre = String(l.nombre || "").trim();
-        const empresa = String(l.empresa || "").trim();
-        return id || nombre || empresa;
-      });
-    }
+  function cleanCRM(leads){
+    return safeArray(leads).filter(l => {
+      const id = String(l.id || "").trim();
+      const nombre = String(l.nombre || "").trim();
+      const empresa = String(l.empresa || "").trim();
+      return id || nombre || empresa;
+    });
+  }
 
-    function cleanComodatos(rows){
-      return safeArray(rows)
-        .filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"))
-        .map((r, idx) => ({
-          numero: r.numero ?? r.num ?? (idx + 1),
-          cliente: r.cliente ?? "--",
-          contacto: r.contacto ?? "--",
-          rep: r.rep ?? "--",
-          devices: r.devices ?? "--",
-          estado: r.estado ?? "--",
-          fechaEntrega: r.fechaEntrega ?? "--",
-          fechaDevolucion: r.fechaDevolucion ?? "--",
-          ciudad: r.ciudad ?? "--",
-          notas: r.notas ?? "--"
-        }));
-    }
-
-    function cleanCobranza(rows){
-      return safeArray(rows)
-        .filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"))
-        .map((r, idx) => ({
-          numero: r.numero ?? r.num ?? (idx + 1),
-          cliente: r.cliente ?? "--",
-          rep: r.rep ?? "--",
-          montoTotal: r.montoTotal ?? r.monto ?? "--",
-          saldoPend: r.saldoPend ?? r.saldo ?? "--",
-          estado: r.estado ?? "--",
-          accion: r.accion ?? "--"
-        }));
-    }
-
-    function normalizePipelineRows(rows){
-      return safeArray(rows).map((r, idx) => ({
-        numero: r.numero ?? r.num ?? r.id ?? (idx + 1),
-        cliente: r.cliente ?? r.clienteClub ?? r.club ?? "--",
+  function cleanComodatos(rows){
+    return safeArray(rows)
+      .filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"))
+      .map((r, idx) => ({
+        numero: r.numero ?? r.num ?? (idx + 1),
+        cliente: r.cliente ?? "--",
         contacto: r.contacto ?? "--",
         rep: r.rep ?? "--",
         devices: r.devices ?? "--",
-        monto: r.monto ?? "--",
-        estadoVenta: r.estadoVenta ?? r.venta ?? "--",
-        estadoPago: r.estadoPago ?? r.pago ?? "--",
-        saldoPend: r.saldoPend ?? r.saldoPendiente ?? r.saldo ?? "--",
-        formaPago: r.formaPago ?? "--",
-        entrega: r.entrega ?? "--",
-        fechaEntrega: r.fechaEntrega ?? r.fEntrega ?? "--",
+        estado: r.estado ?? "--",
+        fechaEntrega: r.fechaEntrega ?? "--",
+        fechaDevolucion: r.fechaDevolucion ?? "--",
         ciudad: r.ciudad ?? "--",
-        conFactura: r.conFactura ?? "--",
         notas: r.notas ?? "--"
       }));
-    }
+  }
 
-    function toast(msg){
-      const root = document.getElementById("toast");
-      const el = document.createElement("div");
-      el.className = "toast-item";
-      el.textContent = msg;
-      root.appendChild(el);
-      setTimeout(() => el.remove(), 2600);
-    }
+  function cleanCobranza(rows){
+    return safeArray(rows)
+      .filter(r => !String(r.cliente || "").toUpperCase().includes("TOTAL"))
+      .map((r, idx) => ({
+        numero: r.numero ?? r.num ?? (idx + 1),
+        cliente: r.cliente ?? "--",
+        rep: r.rep ?? "--",
+        montoTotal: r.montoTotal ?? r.monto ?? "--",
+        saldoPend: r.saldoPend ?? r.saldo ?? "--",
+        estado: r.estado ?? "--",
+        accion: r.accion ?? "--"
+      }));
+  }
 
-    function badge(value){
-      const txt = String(value || "").trim();
-      const up = txt.toUpperCase();
+  function normalizePipelineRows(rows){
+    return safeArray(rows).map((r, idx) => ({
+      numero: r.numero ?? r.num ?? r.id ?? (idx + 1),
+      cliente: r.cliente ?? r.clienteClub ?? r.club ?? "--",
+      contacto: r.contacto ?? "--",
+      rep: r.rep ?? "--",
+      devices: r.devices ?? "--",
+      monto: r.monto ?? "--",
+      estadoVenta: r.estadoVenta ?? r.venta ?? "--",
+      estadoPago: r.estadoPago ?? r.pago ?? "--",
+      saldoPend: r.saldoPend ?? r.saldoPendiente ?? r.saldo ?? "--",
+      formaPago: r.formaPago ?? "--",
+      entrega: r.entrega ?? "--",
+      fechaEntrega: r.fechaEntrega ?? r.fEntrega ?? "--",
+      ciudad: r.ciudad ?? "--",
+      conFactura: r.conFactura ?? "--",
+      notas: r.notas ?? "--"
+    }));
+  }
 
-      if (!txt || txt === "--") return `<span class="badge b-gray">--</span>`;
-      if (up.includes("PAGADO") || up.includes("CERRADA") || up.includes("EN USO") || up === "NUEVO" || up.includes("SI")) return `<span class="badge b-green">${txt}</span>`;
-      if (up.includes("PENDIENTE")) return `<span class="badge b-yellow">${txt}</span>`;
-      if (up.includes("INCOMPLETA") || up.includes("PROSPECCIÓN") || up.includes("PROSPECCION") || up.includes("DEMO") || up.includes("PROPUESTA") || up.includes("NEGOCIACIÓN") || up.includes("NEGOCIACION") || up.includes("CONTACTADO") || up.includes("ENVIADO")) return `<span class="badge b-blue">${txt}</span>`;
-      if (up.includes("PERDIDO") || up.includes("NO")) return `<span class="badge b-red">${txt}</span>`;
-      return `<span class="badge b-gray">${txt}</span>`;
-    }
+  function toast(msg){
+    const root = document.getElementById("toast");
+    const el = document.createElement("div");
+    el.className = "toast-item";
+    el.textContent = msg;
+    root.appendChild(el);
+    setTimeout(() => el.remove(), 2600);
+  }
 
-    function setTab(tab){
-      currentTab = tab;
-      document.querySelectorAll(".tab").forEach(btn => btn.classList.remove("active"));
-      const active = document.getElementById(`tab-${tab}`);
-      if (active) active.classList.add("active");
+  function badge(value){
+    const txt = String(value || "").trim();
+    const up = txt.toUpperCase();
+
+    if (!txt || txt === "--") return `<span class="badge b-gray">--</span>`;
+    if (up.includes("PAGADO") || up.includes("CERRADA") || up.includes("EN USO") || up === "NUEVO" || up.includes("SI")) return `<span class="badge b-green">${txt}</span>`;
+    if (up.includes("PENDIENTE")) return `<span class="badge b-yellow">${txt}</span>`;
+    if (up.includes("INCOMPLETA") || up.includes("PROSPECCIÓN") || up.includes("PROSPECCION") || up.includes("DEMO") || up.includes("PROPUESTA") || up.includes("NEGOCIACIÓN") || up.includes("NEGOCIACION") || up.includes("CONTACTADO") || up.includes("ENVIADO")) return `<span class="badge b-blue">${txt}</span>`;
+    if (up.includes("PERDIDO") || up.includes("NO")) return `<span class="badge b-red">${txt}</span>`;
+    return `<span class="badge b-gray">${txt}</span>`;
+  }
+
+  function setTab(tab){
+    currentTab = tab;
+    document.querySelectorAll(".tab").forEach(btn => btn.classList.remove("active"));
+    const active = document.getElementById(`tab-${tab}`);
+    if (active) active.classList.add("active");
+    render();
+  }
+
+  async function apiGetAll(){
+    const url = `${API}?t=${Date.now()}`;
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error("No se pudo leer la API");
+    return await res.json();
+  }
+
+  async function apiPost(payload){
+    const body = new URLSearchParams(payload);
+    const res = await fetch(API, {
+      method:"POST",
+      body
+    });
+    if (!res.ok) throw new Error("No se pudo guardar");
+    return await res.json();
+  }
+
+  async function load(showToast = false){
+    if (isLoading) return;
+    isLoading = true;
+
+    const root = document.getElementById("appContent");
+    root.innerHTML = `<div class="panel"><div class="empty">Cargando información...</div></div>`;
+
+    try{
+      data = await apiGetAll();
       render();
+      if (showToast) toast("Información actualizada");
+    }catch(e){
+      console.error("Error cargando app:", e);
+      root.innerHTML = `<div class="panel"><div class="empty">No se pudo cargar la información.</div></div>`;
+    }finally{
+      isLoading = false;
     }
+  }
 
-    async function apiGetAll(){
-      const url = `${API}?t=${Date.now()}&r=${Math.random().toString(36).slice(2,8)}`;
-      const res = await fetch(url, {
-        method: "GET",
-        cache: "no-store",
-        headers: {
-          "Cache-Control": "no-cache, no-store, max-age=0",
-          "Pragma": "no-cache"
-        }
-      });
+  function renderDashboard(){
+    const d = getDashboardMetrics(data.dashboard || {});
+    const pipeline = normalizePipelineRows(data.pipeline);
+    const comodatos = cleanComodatos(data.comodatos);
+    const cobranza = cleanCobranza(data.cobranza);
+    const crm = cleanCRM(data.leads);
 
-      if (!res.ok) throw new Error("No se pudo leer la API");
-      return await res.json();
-    }
+    return `
+      <div class="kpis">
+        <div class="kpi">
+          <div class="kpi-label">Ventas cerradas</div>
+          <div class="kpi-value">${normalizeValue(d.cerradas, 0)}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Ventas incompletas</div>
+          <div class="kpi-value">${normalizeValue(d.incompletas, 0)}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Prospección</div>
+          <div class="kpi-value">${normalizeValue(d.prospeccion, 0)}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">En comodato</div>
+          <div class="kpi-value">${normalizeValue(d.comodato, 0)}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Total devices</div>
+          <div class="kpi-value">${normalizeValue(d.totalDevices, 0)}</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Inventario Redwood</div>
+          <div class="kpi-value">${normalizeValue(d.redwood, 0)}</div>
+        </div>
+      </div>
 
-    async function apiPost(payload){
-      const body = new URLSearchParams(payload);
-      const res = await fetch(API, {
-        method:"POST",
-        body,
-        cache:"no-store",
-        headers:{
-          "Cache-Control":"no-cache"
-        }
-      });
-      if (!res.ok) throw new Error("No se pudo guardar");
-      return await res.json();
-    }
-
-    async function load(showToast = false){
-      if (isLoading) return;
-      isLoading = true;
-
-      const root = document.getElementById("appContent");
-      root.innerHTML = `<div class="panel"><div class="empty">Cargando información...</div></div>`;
-
-      try{
-        data = await apiGetAll();
-        render();
-        if (showToast) toast("Información actualizada");
-      }catch(e){
-        root.innerHTML = `<div class="panel"><div class="empty">No se pudo cargar la información.</div></div>`;
-      }finally{
-        isLoading = false;
-      }
-    }
-
-    function renderDashboard(){
-      const d = getDashboardMetrics(data.dashboard || {});
-      const pipeline = normalizePipelineRows(data.pipeline);
-      const comodatos = cleanComodatos(data.comodatos);
-      const cobranza = cleanCobranza(data.cobranza);
-      const crm = cleanCRM(data.leads);
-
-      return `
-        <div class="kpis">
-          <div class="kpi">
-            <div class="kpi-label">Ventas cerradas</div>
-            <div class="kpi-value">${normalizeValue(d.cerradas, 0)}</div>
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2 class="panel-title">Resumen ejecutivo</h2>
+              <p class="panel-subtitle">Vista inicial del sistema. Redwood es solo lectura y se controla desde el Sheet.</p>
+            </div>
+            <div class="meta-pill">CRM: ${crm.length} · Ventas: ${pipeline.length} · Inventario en uso: ${comodatos.length} · Cobranza: ${cobranza.length}</div>
           </div>
-          <div class="kpi">
-            <div class="kpi-label">Ventas incompletas</div>
-            <div class="kpi-value">${normalizeValue(d.incompletas, 0)}</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Prospección</div>
-            <div class="kpi-value">${normalizeValue(d.prospeccion, 0)}</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">En comodato</div>
-            <div class="kpi-value">${normalizeValue(d.comodato, 0)}</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Total devices</div>
-            <div class="kpi-value">${normalizeValue(d.totalDevices, 0)}</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Inventario Redwood</div>
-            <div class="kpi-value">${normalizeValue(d.redwood, 0)}</div>
+
+          <div class="table-wrap">
+            <table style="min-width:620px">
+              <thead>
+                <tr>
+                  <th>Métrica</th>
+                  <th>Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td class="name">Ventas cerradas</td><td>${normalizeValue(d.cerradas, 0)}</td></tr>
+                <tr><td class="name">Ventas incompletas</td><td>${normalizeValue(d.incompletas, 0)}</td></tr>
+                <tr><td class="name">Prospección</td><td>${normalizeValue(d.prospeccion, 0)}</td></tr>
+                <tr><td class="name">En comodato</td><td>${normalizeValue(d.comodato, 0)}</td></tr>
+                <tr><td class="name">Total devices</td><td>${normalizeValue(d.totalDevices, 0)}</td></tr>
+                <tr><td class="name">Producidos</td><td>${normalizeValue(d.producidos, 0)}</td></tr>
+                <tr><td class="name">Inventario Redwood</td><td>${normalizeValue(d.redwood, 0)}</td></tr>
+                <tr><td class="name">Diferencia</td><td>${normalizeValue(d.diferencia, 0)}</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div class="two-col">
-          <div class="panel">
-            <div class="panel-head">
-              <div>
-                <h2 class="panel-title">Resumen ejecutivo</h2>
-                <p class="panel-subtitle">Vista inicial del sistema. Redwood es solo lectura y se controla desde el Sheet.</p>
-              </div>
-              <div class="meta-pill">CRM: ${crm.length} · Ventas: ${pipeline.length} · Inventario en uso: ${comodatos.length} · Cobranza: ${cobranza.length}</div>
-            </div>
+        <div class="summary-list">
+          <div class="summary-item">
+            <strong>Inventario Redwood</strong>
+            <span>${normalizeValue(d.redwood, 0)}</span>
+          </div>
+          <div class="summary-item">
+            <strong>Control</strong>
+            <span style="font-size:14px;font-weight:800;color:#7b8190">Dato manual. Solo lectura en la app.</span>
+          </div>
+          <div class="summary-item">
+            <strong>Diferencia</strong>
+            <span>${normalizeValue(d.diferencia, 0)}</span>
+          </div>
+          <div class="summary-item">
+            <strong>Acción rápida</strong>
+            <span style="font-size:14px;font-weight:800;color:#7b8190">Crear lead nuevo desde esta pantalla.</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
-            <div class="table-wrap">
-              <table style="min-width:620px">
-                <thead>
+  function renderVentas(){
+    const rows = normalizePipelineRows(data.pipeline);
+
+    return `
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">Ventas</h2>
+            <p class="panel-subtitle">Pipeline comercial con todas las columnas visibles según la estructura de tu hoja.</p>
+          </div>
+          <div class="meta-pill">${rows.length} registros</div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cliente / Club</th>
+                <th>Contacto</th>
+                <th>Rep</th>
+                <th>Devices</th>
+                <th>Monto</th>
+                <th>Estado venta</th>
+                <th>Estado pago</th>
+                <th>Saldo pend.</th>
+                <th>Forma pago</th>
+                <th>Entrega</th>
+                <th>F. entrega</th>
+                <th>Ciudad</th>
+                <th>Con factura</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${
+                rows.length
+                ? rows.map(r => `
                   <tr>
-                    <th>Métrica</th>
-                    <th>Valor</th>
+                    <td>${r.numero ?? "--"}</td>
+                    <td class="name">${r.cliente || "--"}</td>
+                    <td>${r.contacto || "--"}</td>
+                    <td>${r.rep || "--"}</td>
+                    <td>${r.devices || "--"}</td>
+                    <td>${r.monto || "--"}</td>
+                    <td>${badge(r.estadoVenta || "--")}</td>
+                    <td>${badge(r.estadoPago || "--")}</td>
+                    <td>${r.saldoPend || "--"}</td>
+                    <td>${r.formaPago || "--"}</td>
+                    <td>${badge(r.entrega || "--")}</td>
+                    <td>${r.fechaEntrega || "--"}</td>
+                    <td>${r.ciudad || "--"}</td>
+                    <td>${badge(r.conFactura || "--")}</td>
+                    <td class="wrap">${r.notas || "--"}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  <tr><td class="name">Ventas cerradas</td><td>${normalizeValue(d.cerradas, 0)}</td></tr>
-                  <tr><td class="name">Ventas incompletas</td><td>${normalizeValue(d.incompletas, 0)}</td></tr>
-                  <tr><td class="name">Prospección</td><td>${normalizeValue(d.prospeccion, 0)}</td></tr>
-                  <tr><td class="name">En comodato</td><td>${normalizeValue(d.comodato, 0)}</td></tr>
-                  <tr><td class="name">Total devices</td><td>${normalizeValue(d.totalDevices, 0)}</td></tr>
-                  <tr><td class="name">Producidos</td><td>${normalizeValue(d.producidos, 0)}</td></tr>
-                  <tr><td class="name">Inventario Redwood</td><td>${normalizeValue(d.redwood, 0)}</td></tr>
-                  <tr><td class="name">Diferencia</td><td>${normalizeValue(d.diferencia, 0)}</td></tr>
-                </tbody>
-              </table>
-            </div>
+                `).join("")
+                : `<tr><td colspan="15" class="empty">Sin registros.</td></tr>`
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderComodatos(){
+    const rows = cleanComodatos(data.comodatos);
+
+    return `
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">Inventario en uso</h2>
+            <p class="panel-subtitle">Todas las columnas activas de la pestaña de comodato.</p>
+          </div>
+          <div class="meta-pill">${rows.length} registros</div>
+        </div>
+
+        <div class="table-wrap">
+          <table style="min-width:1200px">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cliente / Club</th>
+                <th>Contacto</th>
+                <th>Rep</th>
+                <th>Devices</th>
+                <th>Estado</th>
+                <th>F. entrega</th>
+                <th>F. devolución</th>
+                <th>Ciudad</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${
+                rows.length
+                ? rows.map(r => `
+                  <tr>
+                    <td>${r.numero ?? "--"}</td>
+                    <td class="name">${r.cliente || "--"}</td>
+                    <td>${r.contacto || "--"}</td>
+                    <td>${r.rep || "--"}</td>
+                    <td>${r.devices || "--"}</td>
+                    <td>${badge(r.estado || "--")}</td>
+                    <td>${r.fechaEntrega || "--"}</td>
+                    <td>${r.fechaDevolucion || "--"}</td>
+                    <td>${r.ciudad || "--"}</td>
+                    <td class="wrap">${r.notas || "--"}</td>
+                  </tr>
+                `).join("")
+                : `<tr><td colspan="10" class="empty">Sin registros.</td></tr>`
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderCobranza(){
+    const rows = cleanCobranza(data.cobranza);
+
+    return `
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">Cobranza</h2>
+            <p class="panel-subtitle">Todas las columnas activas de la pestaña de cobranza.</p>
+          </div>
+          <div class="meta-pill">${rows.length} registros</div>
+        </div>
+
+        <div class="table-wrap">
+          <table style="min-width:1100px">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cliente</th>
+                <th>Rep</th>
+                <th>Monto total</th>
+                <th>Saldo pend.</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${
+                rows.length
+                ? rows.map(r => `
+                  <tr>
+                    <td>${r.numero ?? "--"}</td>
+                    <td class="name">${r.cliente || "--"}</td>
+                    <td>${r.rep || "--"}</td>
+                    <td>${r.montoTotal || "--"}</td>
+                    <td>${r.saldoPend || "--"}</td>
+                    <td>${badge(r.estado || "--")}</td>
+                    <td class="wrap">${r.accion || "--"}</td>
+                  </tr>
+                `).join("")
+                : `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderCRM(){
+    const leads = cleanCRM(data.leads);
+
+    return `
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 class="panel-title">CRM</h2>
+            <p class="panel-subtitle">Leads visibles, editables y sincronizados con la hoja.</p>
           </div>
 
-          <div class="summary-list">
-            <div class="summary-item">
-              <strong>Inventario Redwood</strong>
-              <span>${normalizeValue(d.redwood, 0)}</span>
-            </div>
-            <div class="summary-item">
-              <strong>Control</strong>
-              <span style="font-size:14px;font-weight:800;color:#7b8190">Dato manual. Solo lectura en la app.</span>
-            </div>
-            <div class="summary-item">
-              <strong>Diferencia</strong>
-              <span>${normalizeValue(d.diferencia, 0)}</span>
-            </div>
-            <div class="summary-item">
-              <strong>Acción rápida</strong>
-              <span style="font-size:14px;font-weight:800;color:#7b8190">Crear lead nuevo desde esta pantalla.</span>
-            </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <div class="meta-pill">${leads.length} registros</div>
+            <button class="btn btn-primary" onclick="openLeadModal()">+ Nuevo lead</button>
           </div>
         </div>
-      `;
-    }
 
-    function renderVentas(){
-      const rows = normalizePipelineRows(data.pipeline);
+        ${
+          leads.length
+          ? `<div class="crm-grid">
+              ${leads.map(l => `
+                <div class="crm-card">
+                  <h3 class="crm-name">${l.nombre || "Sin nombre"}</h3>
+                  <p class="crm-company">${l.empresa || "Sin empresa"}</p>
 
-      return `
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <h2 class="panel-title">Ventas</h2>
-              <p class="panel-subtitle">Pipeline comercial con todas las columnas visibles según la estructura de tu hoja.</p>
-            </div>
-            <div class="meta-pill">${rows.length} registros</div>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Cliente / Club</th>
-                  <th>Contacto</th>
-                  <th>Rep</th>
-                  <th>Devices</th>
-                  <th>Monto</th>
-                  <th>Estado venta</th>
-                  <th>Estado pago</th>
-                  <th>Saldo pend.</th>
-                  <th>Forma pago</th>
-                  <th>Entrega</th>
-                  <th>F. entrega</th>
-                  <th>Ciudad</th>
-                  <th>Con factura</th>
-                  <th>Notas</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${
-                  rows.length
-                  ? rows.map(r => `
-                    <tr>
-                      <td>${r.numero ?? "--"}</td>
-                      <td class="name">${r.cliente || "--"}</td>
-                      <td>${r.contacto || "--"}</td>
-                      <td>${r.rep || "--"}</td>
-                      <td>${r.devices || "--"}</td>
-                      <td>${r.monto || "--"}</td>
-                      <td>${badge(r.estadoVenta || "--")}</td>
-                      <td>${badge(r.estadoPago || "--")}</td>
-                      <td>${r.saldoPend || "--"}</td>
-                      <td>${r.formaPago || "--"}</td>
-                      <td>${badge(r.entrega || "--")}</td>
-                      <td>${r.fechaEntrega || "--"}</td>
-                      <td>${r.ciudad || "--"}</td>
-                      <td>${badge(r.conFactura || "--")}</td>
-                      <td class="wrap">${r.notas || "--"}</td>
-                    </tr>
-                  `).join("")
-                  : `<tr><td colspan="15" class="empty">Sin registros.</td></tr>`
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderComodatos(){
-      const rows = cleanComodatos(data.comodatos);
-
-      return `
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <h2 class="panel-title">Inventario en uso</h2>
-              <p class="panel-subtitle">Todas las columnas activas de la pestaña de comodato.</p>
-            </div>
-            <div class="meta-pill">${rows.length} registros</div>
-          </div>
-
-          <div class="table-wrap">
-            <table style="min-width:1200px">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Cliente / Club</th>
-                  <th>Contacto</th>
-                  <th>Rep</th>
-                  <th>Devices</th>
-                  <th>Estado</th>
-                  <th>F. entrega</th>
-                  <th>F. devolución</th>
-                  <th>Ciudad</th>
-                  <th>Notas</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${
-                  rows.length
-                  ? rows.map(r => `
-                    <tr>
-                      <td>${r.numero ?? "--"}</td>
-                      <td class="name">${r.cliente || "--"}</td>
-                      <td>${r.contacto || "--"}</td>
-                      <td>${r.rep || "--"}</td>
-                      <td>${r.devices || "--"}</td>
-                      <td>${badge(r.estado || "--")}</td>
-                      <td>${r.fechaEntrega || "--"}</td>
-                      <td>${r.fechaDevolucion || "--"}</td>
-                      <td>${r.ciudad || "--"}</td>
-                      <td class="wrap">${r.notas || "--"}</td>
-                    </tr>
-                  `).join("")
-                  : `<tr><td colspan="10" class="empty">Sin registros.</td></tr>`
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderCobranza(){
-      const rows = cleanCobranza(data.cobranza);
-
-      return `
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <h2 class="panel-title">Cobranza</h2>
-              <p class="panel-subtitle">Todas las columnas activas de la pestaña de cobranza.</p>
-            </div>
-            <div class="meta-pill">${rows.length} registros</div>
-          </div>
-
-          <div class="table-wrap">
-            <table style="min-width:1100px">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Cliente</th>
-                  <th>Rep</th>
-                  <th>Monto total</th>
-                  <th>Saldo pend.</th>
-                  <th>Estado</th>
-                  <th>Acción</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${
-                  rows.length
-                  ? rows.map(r => `
-                    <tr>
-                      <td>${r.numero ?? "--"}</td>
-                      <td class="name">${r.cliente || "--"}</td>
-                      <td>${r.rep || "--"}</td>
-                      <td>${r.montoTotal || "--"}</td>
-                      <td>${r.saldoPend || "--"}</td>
-                      <td>${badge(r.estado || "--")}</td>
-                      <td class="wrap">${r.accion || "--"}</td>
-                    </tr>
-                  `).join("")
-                  : `<tr><td colspan="7" class="empty">Sin registros.</td></tr>`
-                }
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderCRM(){
-      const leads = cleanCRM(data.leads);
-
-      return `
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <h2 class="panel-title">CRM</h2>
-              <p class="panel-subtitle">Leads visibles, editables y sincronizados con la hoja.</p>
-            </div>
-
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <div class="meta-pill">${leads.length} registros</div>
-              <button class="btn btn-primary" onclick="openLeadModal()">+ Nuevo lead</button>
-            </div>
-          </div>
-
-          ${
-            leads.length
-            ? `<div class="crm-grid">
-                ${leads.map(l => `
-                  <div class="crm-card">
-                    <h3 class="crm-name">${l.nombre || "Sin nombre"}</h3>
-                    <p class="crm-company">${l.empresa || "Sin empresa"}</p>
-
-                    <div class="crm-meta">
-                      <div class="crm-box">
-                        <strong>Rep</strong>
-                        <span>${l.rep || "--"}</span>
-                      </div>
-                      <div class="crm-box">
-                        <strong>Stage</strong>
-                        <span>${String(l.stage || "--")}</span>
-                      </div>
-                      <div class="crm-box">
-                        <strong>Ciudad</strong>
-                        <span>${l.ciudad || "--"}</span>
-                      </div>
-                      <div class="crm-box">
-                        <strong>Fuente</strong>
-                        <span>${l.fuente || "--"}</span>
-                      </div>
-                      <div class="crm-box">
-                        <strong>Teléfono</strong>
-                        <span>${l.tel || "--"}</span>
-                      </div>
-                      <div class="crm-box">
-                        <strong>Email</strong>
-                        <span>${l.email || "--"}</span>
-                      </div>
+                  <div class="crm-meta">
+                    <div class="crm-box">
+                      <strong>Rep</strong>
+                      <span>${l.rep || "--"}</span>
                     </div>
-
-                    <div class="card-actions">
-                      <button class="btn btn-soft" onclick="openLeadModal('${escapeJs(l.id)}')">Editar</button>
-                      <button class="btn btn-danger" onclick="deleteLead('${escapeJs(l.id)}')">Eliminar</button>
+                    <div class="crm-box">
+                      <strong>Stage</strong>
+                      <span>${String(l.stage || "--")}</span>
+                    </div>
+                    <div class="crm-box">
+                      <strong>Ciudad</strong>
+                      <span>${l.ciudad || "--"}</span>
+                    </div>
+                    <div class="crm-box">
+                      <strong>Fuente</strong>
+                      <span>${l.fuente || "--"}</span>
+                    </div>
+                    <div class="crm-box">
+                      <strong>Teléfono</strong>
+                      <span>${l.tel || "--"}</span>
+                    </div>
+                    <div class="crm-box">
+                      <strong>Email</strong>
+                      <span>${l.email || "--"}</span>
                     </div>
                   </div>
-                `).join("")}
-              </div>`
-            : `<div class="empty">No hay leads visibles.</div>`
-          }
-        </div>
-      `;
+
+                  <div class="card-actions">
+                    <button class="btn btn-soft" onclick="openLeadModal('${escapeJs(l.id)}')">Editar</button>
+                    <button class="btn btn-danger" onclick="deleteLead('${escapeJs(l.id)}')">Eliminar</button>
+                  </div>
+                </div>
+              `).join("")}
+            </div>`
+          : `<div class="empty">No hay leads visibles.</div>`
+        }
+      </div>
+    `;
+  }
+
+  function render(){
+    const root = document.getElementById("appContent");
+
+    if (!data || !data.ok){
+      root.innerHTML = `<div class="panel"><div class="empty">Sin información disponible.</div></div>`;
+      return;
     }
 
-    function render(){
-      const root = document.getElementById("appContent");
+    if (currentTab === "dashboard") root.innerHTML = renderDashboard();
+    if (currentTab === "pipeline") root.innerHTML = renderVentas();
+    if (currentTab === "comodatos") root.innerHTML = renderComodatos();
+    if (currentTab === "cobranza") root.innerHTML = renderCobranza();
+    if (currentTab === "crm") root.innerHTML = renderCRM();
+  }
 
-      if (!data || !data.ok){
-        root.innerHTML = `<div class="panel"><div class="empty">Sin información disponible.</div></div>`;
+  function genId(){
+    return "lead_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
+  }
+
+  function findLead(id){
+    return cleanCRM(data.leads).find(l => String(l.id || "") === String(id || ""));
+  }
+
+  function escapeJs(str){
+    return String(str || "").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  }
+
+  function escapeHtmlAttr(str){
+    return String(str || "")
+      .replace(/&/g,"&amp;")
+      .replace(/"/g,"&quot;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;");
+  }
+
+  function closeModal(){
+    document.getElementById("modalRoot").innerHTML = "";
+  }
+
+  function openLeadModal(id = ""){
+    const lead = id ? findLead(id) : null;
+
+    document.getElementById("modalRoot").innerHTML = `
+      <div class="modal-overlay open" id="modalOverlay">
+        <div class="modal">
+          <div class="modal-head">
+            <div>
+              <h3 class="modal-title">${lead ? "Editar lead" : "Nuevo lead"}</h3>
+              <p class="modal-sub">Los cambios se guardan en Google Sheets y se reflejan para todos al actualizar.</p>
+            </div>
+            <button class="close" id="closeModalBtn">×</button>
+          </div>
+
+          <div class="form-grid">
+            <div class="field">
+              <label>Nombre</label>
+              <input id="leadNombre" value="${escapeHtmlAttr(lead?.nombre || "")}" />
+            </div>
+            <div class="field">
+              <label>Empresa</label>
+              <input id="leadEmpresa" value="${escapeHtmlAttr(lead?.empresa || "")}" />
+            </div>
+
+            <div class="field">
+              <label>Rep</label>
+              <select id="leadRep">
+                ${REPS.map(r => `<option value="${r}" ${lead?.rep === r ? "selected" : ""}>${r}</option>`).join("")}
+              </select>
+            </div>
+            <div class="field">
+              <label>Ciudad</label>
+              <input id="leadCiudad" value="${escapeHtmlAttr(lead?.ciudad || "")}" />
+            </div>
+
+            <div class="field">
+              <label>Teléfono</label>
+              <input id="leadTel" value="${escapeHtmlAttr(lead?.tel || "")}" />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input id="leadEmail" value="${escapeHtmlAttr(lead?.email || "")}" />
+            </div>
+
+            <div class="field">
+              <label>Fuente</label>
+              <select id="leadFuente">
+                ${FUENTES.map(f => `<option value="${f}" ${lead?.fuente === f ? "selected" : ""}>${f}</option>`).join("")}
+              </select>
+            </div>
+            <div class="field">
+              <label>Stage</label>
+              <select id="leadStage">
+                ${STAGES.map(s => `<option value="${s}" ${lead?.stage === s ? "selected" : ""}>${s}</option>`).join("")}
+              </select>
+            </div>
+
+            <div class="field full">
+              <label>Siguiente seguimiento</label>
+              <input type="date" id="leadNextFollow" value="${escapeHtmlAttr(lead?.nextFollow || "")}" />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn btn-primary" id="saveLeadBtn">${lead ? "Guardar cambios" : "Guardar lead"}</button>
+            <button class="btn btn-secondary" id="cancelLeadBtn">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("closeModalBtn").onclick = closeModal;
+    document.getElementById("cancelLeadBtn").onclick = closeModal;
+    document.getElementById("modalOverlay").onclick = (e) => {
+      if (e.target.id === "modalOverlay") closeModal();
+    };
+
+    document.getElementById("saveLeadBtn").onclick = async () => {
+      const nombre = document.getElementById("leadNombre").value.trim();
+      if (!nombre){
+        toast("El nombre es obligatorio");
         return;
       }
 
-      if (currentTab === "dashboard") root.innerHTML = renderDashboard();
-      if (currentTab === "pipeline") root.innerHTML = renderVentas();
-      if (currentTab === "comodatos") root.innerHTML = renderComodatos();
-      if (currentTab === "cobranza") root.innerHTML = renderCobranza();
-      if (currentTab === "crm") root.innerHTML = renderCRM();
-    }
-
-    function genId(){
-      return "lead_" + Date.now() + "_" + Math.random().toString(36).slice(2,7);
-    }
-
-    function findLead(id){
-      return cleanCRM(data.leads).find(l => String(l.id || "") === String(id || ""));
-    }
-
-    function escapeJs(str){
-      return String(str || "").replace(/\\/g,"\\\\").replace(/'/g,"\\'");
-    }
-
-    function escapeHtmlAttr(str){
-      return String(str || "")
-        .replace(/&/g,"&amp;")
-        .replace(/"/g,"&quot;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;");
-    }
-
-    function closeModal(){
-      document.getElementById("modalRoot").innerHTML = "";
-    }
-
-    function openLeadModal(id = ""){
-      const lead = id ? findLead(id) : null;
-
-      document.getElementById("modalRoot").innerHTML = `
-        <div class="modal-overlay open" id="modalOverlay">
-          <div class="modal">
-            <div class="modal-head">
-              <div>
-                <h3 class="modal-title">${lead ? "Editar lead" : "Nuevo lead"}</h3>
-                <p class="modal-sub">Los cambios se guardan en Google Sheets y se reflejan para todos al actualizar.</p>
-              </div>
-              <button class="close" id="closeModalBtn">×</button>
-            </div>
-
-            <div class="form-grid">
-              <div class="field">
-                <label>Nombre</label>
-                <input id="leadNombre" value="${escapeHtmlAttr(lead?.nombre || "")}" />
-              </div>
-              <div class="field">
-                <label>Empresa</label>
-                <input id="leadEmpresa" value="${escapeHtmlAttr(lead?.empresa || "")}" />
-              </div>
-
-              <div class="field">
-                <label>Rep</label>
-                <select id="leadRep">
-                  ${REPS.map(r => `<option value="${r}" ${lead?.rep === r ? "selected" : ""}>${r}</option>`).join("")}
-                </select>
-              </div>
-              <div class="field">
-                <label>Ciudad</label>
-                <input id="leadCiudad" value="${escapeHtmlAttr(lead?.ciudad || "")}" />
-              </div>
-
-              <div class="field">
-                <label>Teléfono</label>
-                <input id="leadTel" value="${escapeHtmlAttr(lead?.tel || "")}" />
-              </div>
-              <div class="field">
-                <label>Email</label>
-                <input id="leadEmail" value="${escapeHtmlAttr(lead?.email || "")}" />
-              </div>
-
-              <div class="field">
-                <label>Fuente</label>
-                <select id="leadFuente">
-                  ${FUENTES.map(f => `<option value="${f}" ${lead?.fuente === f ? "selected" : ""}>${f}</option>`).join("")}
-                </select>
-              </div>
-              <div class="field">
-                <label>Stage</label>
-                <select id="leadStage">
-                  ${STAGES.map(s => `<option value="${s}" ${lead?.stage === s ? "selected" : ""}>${s}</option>`).join("")}
-                </select>
-              </div>
-
-              <div class="field full">
-                <label>Siguiente seguimiento</label>
-                <input type="date" id="leadNextFollow" value="${escapeHtmlAttr(lead?.nextFollow || "")}" />
-              </div>
-            </div>
-
-            <div class="modal-actions">
-              <button class="btn btn-primary" id="saveLeadBtn">${lead ? "Guardar cambios" : "Guardar lead"}</button>
-              <button class="btn btn-secondary" id="cancelLeadBtn">Cancelar</button>
-            </div>
-          </div>
-        </div>
-      `;
-
-      document.getElementById("closeModalBtn").onclick = closeModal;
-      document.getElementById("cancelLeadBtn").onclick = closeModal;
-      document.getElementById("modalOverlay").onclick = (e) => {
-        if (e.target.id === "modalOverlay") closeModal();
+      const payload = {
+        action: "lead_upsert",
+        id: lead?.id || genId(),
+        nombre,
+        empresa: document.getElementById("leadEmpresa").value.trim(),
+        rep: document.getElementById("leadRep").value,
+        ciudad: document.getElementById("leadCiudad").value.trim(),
+        tel: document.getElementById("leadTel").value.trim(),
+        email: document.getElementById("leadEmail").value.trim(),
+        fuente: document.getElementById("leadFuente").value,
+        stage: document.getElementById("leadStage").value,
+        nextFollow: document.getElementById("leadNextFollow").value,
+        notes: "[]",
+        createdAt: lead?.createdAt || new Date().toISOString().slice(0,10),
+        updatedAt: new Date().toISOString().slice(0,10)
       };
-
-      document.getElementById("saveLeadBtn").onclick = async () => {
-        const nombre = document.getElementById("leadNombre").value.trim();
-        if (!nombre){
-          toast("El nombre es obligatorio");
-          return;
-        }
-
-        const payload = {
-          action: "lead_upsert",
-          id: lead?.id || genId(),
-          nombre,
-          empresa: document.getElementById("leadEmpresa").value.trim(),
-          rep: document.getElementById("leadRep").value,
-          ciudad: document.getElementById("leadCiudad").value.trim(),
-          tel: document.getElementById("leadTel").value.trim(),
-          email: document.getElementById("leadEmail").value.trim(),
-          fuente: document.getElementById("leadFuente").value,
-          stage: document.getElementById("leadStage").value,
-          nextFollow: document.getElementById("leadNextFollow").value,
-          notes: "[]",
-          createdAt: lead?.createdAt || new Date().toISOString().slice(0,10),
-          updatedAt: new Date().toISOString().slice(0,10)
-        };
-
-        try{
-          const res = await apiPost(payload);
-          if (!res.ok) throw new Error(res.error || "No se pudo guardar");
-          closeModal();
-          toast(lead ? "Lead actualizado" : "Lead guardado");
-          await load();
-          setTab("crm");
-        }catch(e){
-          toast("No se pudo guardar el lead");
-        }
-      };
-    }
-
-    async function deleteLead(id){
-      if (!id) return;
-      if (!confirm("¿Eliminar este lead?")) return;
 
       try{
-        const res = await apiPost({ action:"lead_delete", id });
-        if (!res.ok) throw new Error(res.error || "No se pudo eliminar");
-        toast("Lead eliminado");
+        const res = await apiPost(payload);
+        if (!res.ok) throw new Error(res.error || "No se pudo guardar");
+        closeModal();
+        toast(lead ? "Lead actualizado" : "Lead guardado");
         await load();
         setTab("crm");
       }catch(e){
-        toast("No se pudo eliminar el lead");
+        toast("No se pudo guardar el lead");
       }
-    }
+    };
+  }
 
-    load();
-    setInterval(() => load(false), 30000);
-  </script>
-</body>
-</html>
+  async function deleteLead(id){
+    if (!id) return;
+    if (!confirm("¿Eliminar este lead?")) return;
+
+    try{
+      const res = await apiPost({ action:"lead_delete", id });
+      if (!res.ok) throw new Error(res.error || "No se pudo eliminar");
+      toast("Lead eliminado");
+      await load();
+      setTab("crm");
+    }catch(e){
+      toast("No se pudo eliminar el lead");
+    }
+  }
+
+  load();
+  setInterval(() => load(false), 30000);
+</script>
