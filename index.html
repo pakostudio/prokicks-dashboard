@@ -575,7 +575,7 @@
 
         <div class="hero-actions">
           <button class="btn btn-primary" onclick="openLeadModal()">+ Nuevo lead</button>
-          <button class="btn btn-secondary" onclick="load()">Actualizar</button>
+          <button class="btn btn-secondary" onclick="load(true)">Actualizar</button>
         </div>
       </div>
 
@@ -599,6 +599,7 @@
 
     let data = {};
     let currentTab = "dashboard";
+    let isLoading = false;
 
     const STAGES = ["Nuevo","Contactado","Demo","Propuesta","Negociación","Cerrado","Perdido"];
     const FUENTES = ["Referido","Instagram","Facebook","WhatsApp","Web","Evento","Otro"];
@@ -606,6 +607,41 @@
 
     function safeArray(v){
       return Array.isArray(v) ? v : [];
+    }
+
+    function normalizeValue(v, fallback = 0){
+      if (v === null || v === undefined || v === "") return fallback;
+      return v;
+    }
+
+    function getFirst(obj, keys, fallback = 0){
+      for (const key of keys){
+        if (obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== ""){
+          return obj[key];
+        }
+      }
+      return fallback;
+    }
+
+    function getDashboardMetrics(raw = {}){
+      return {
+        cerradas: getFirst(raw, ["cerradas","Cerradas","ventasCerradas","ventas_cerradas"], 0),
+        incompletas: getFirst(raw, ["incompletas","Incompletas","ventasIncompletas","ventas_incompletas"], 0),
+        prospeccion: getFirst(raw, ["prospeccion","Prospeccion","prospecting","pipelineProspeccion"], 0),
+        comodato: getFirst(raw, ["comodato","Comodato","enComodato","inventarioEnUso"], 0),
+        totalDevices: getFirst(raw, ["totalDevices","totaldevices","total_devices","devicesTotales","devices"], 0),
+        producidos: getFirst(raw, ["producidos","Producidos","totalProducidos"], 0),
+        redwood: getFirst(raw, [
+          "redwood",
+          "Redwood",
+          "inventarioRedwood",
+          "inventario_redwood",
+          "redwoodInventario",
+          "Inventario Redwood",
+          "inventario redwood"
+        ], 0),
+        diferencia: getFirst(raw, ["diferencia","Diferencia","delta","diferenciaInventario"], 0)
+      };
     }
 
     function cleanCRM(leads){
@@ -698,32 +734,57 @@
     }
 
     async function apiGetAll(){
-      const res = await fetch(API, { cache:"no-store" });
+      const url = `${API}?t=${Date.now()}&r=${Math.random().toString(36).slice(2,8)}`;
+      const res = await fetch(url, {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache, no-store, max-age=0",
+          "Pragma": "no-cache"
+        }
+      });
+
       if (!res.ok) throw new Error("No se pudo leer la API");
-      return await res.json();
+
+      const json = await res.json();
+      return json;
     }
 
     async function apiPost(payload){
       const body = new URLSearchParams(payload);
-      const res = await fetch(API, { method:"POST", body });
+      const res = await fetch(API, {
+        method:"POST",
+        body,
+        cache:"no-store",
+        headers:{
+          "Cache-Control":"no-cache"
+        }
+      });
       if (!res.ok) throw new Error("No se pudo guardar");
       return await res.json();
     }
 
-    async function load(){
+    async function load(showToast = false){
+      if (isLoading) return;
+      isLoading = true;
+
       const root = document.getElementById("appContent");
       root.innerHTML = `<div class="panel"><div class="empty">Cargando información...</div></div>`;
 
       try{
-        data = await apiGetAll();
+        const freshData = await apiGetAll();
+        data = freshData;
         render();
+        if (showToast) toast("Información actualizada");
       }catch(e){
         root.innerHTML = `<div class="panel"><div class="empty">No se pudo cargar la información.</div></div>`;
+      }finally{
+        isLoading = false;
       }
     }
 
     function renderDashboard(){
-      const d = data.dashboard || {};
+      const d = getDashboardMetrics(data.dashboard || {});
       const pipeline = normalizePipelineRows(data.pipeline);
       const comodatos = cleanComodatos(data.comodatos);
       const cobranza = cleanCobranza(data.cobranza);
@@ -733,27 +794,27 @@
         <div class="kpis">
           <div class="kpi">
             <div class="kpi-label">Ventas cerradas</div>
-            <div class="kpi-value">${d.cerradas ?? 0}</div>
+            <div class="kpi-value">${normalizeValue(d.cerradas, 0)}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">Ventas incompletas</div>
-            <div class="kpi-value">${d.incompletas ?? 0}</div>
+            <div class="kpi-value">${normalizeValue(d.incompletas, 0)}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">Prospección</div>
-            <div class="kpi-value">${d.prospeccion ?? 0}</div>
+            <div class="kpi-value">${normalizeValue(d.prospeccion, 0)}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">En comodato</div>
-            <div class="kpi-value">${d.comodato ?? 0}</div>
+            <div class="kpi-value">${normalizeValue(d.comodato, 0)}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">Total devices</div>
-            <div class="kpi-value">${d.totalDevices ?? 0}</div>
+            <div class="kpi-value">${normalizeValue(d.totalDevices, 0)}</div>
           </div>
           <div class="kpi">
             <div class="kpi-label">Inventario Redwood</div>
-            <div class="kpi-value">${d.redwood ?? 0}</div>
+            <div class="kpi-value">${normalizeValue(d.redwood, 0)}</div>
           </div>
         </div>
 
@@ -776,14 +837,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td class="name">Ventas cerradas</td><td>${d.cerradas ?? 0}</td></tr>
-                  <tr><td class="name">Ventas incompletas</td><td>${d.incompletas ?? 0}</td></tr>
-                  <tr><td class="name">Prospección</td><td>${d.prospeccion ?? 0}</td></tr>
-                  <tr><td class="name">En comodato</td><td>${d.comodato ?? 0}</td></tr>
-                  <tr><td class="name">Total devices</td><td>${d.totalDevices ?? 0}</td></tr>
-                  <tr><td class="name">Producidos</td><td>${d.producidos ?? 0}</td></tr>
-                  <tr><td class="name">Inventario Redwood</td><td>${d.redwood ?? 0}</td></tr>
-                  <tr><td class="name">Diferencia</td><td>${d.diferencia ?? 0}</td></tr>
+                  <tr><td class="name">Ventas cerradas</td><td>${normalizeValue(d.cerradas, 0)}</td></tr>
+                  <tr><td class="name">Ventas incompletas</td><td>${normalizeValue(d.incompletas, 0)}</td></tr>
+                  <tr><td class="name">Prospección</td><td>${normalizeValue(d.prospeccion, 0)}</td></tr>
+                  <tr><td class="name">En comodato</td><td>${normalizeValue(d.comodato, 0)}</td></tr>
+                  <tr><td class="name">Total devices</td><td>${normalizeValue(d.totalDevices, 0)}</td></tr>
+                  <tr><td class="name">Producidos</td><td>${normalizeValue(d.producidos, 0)}</td></tr>
+                  <tr><td class="name">Inventario Redwood</td><td>${normalizeValue(d.redwood, 0)}</td></tr>
+                  <tr><td class="name">Diferencia</td><td>${normalizeValue(d.diferencia, 0)}</td></tr>
                 </tbody>
               </table>
             </div>
@@ -792,7 +853,7 @@
           <div class="summary-list">
             <div class="summary-item">
               <strong>Inventario Redwood</strong>
-              <span>${d.redwood ?? 0}</span>
+              <span>${normalizeValue(d.redwood, 0)}</span>
             </div>
             <div class="summary-item">
               <strong>Control</strong>
@@ -800,7 +861,7 @@
             </div>
             <div class="summary-item">
               <strong>Diferencia</strong>
-              <span>${d.diferencia ?? 0}</span>
+              <span>${normalizeValue(d.diferencia, 0)}</span>
             </div>
             <div class="summary-item">
               <strong>Acción rápida</strong>
@@ -1214,7 +1275,7 @@
     }
 
     load();
-    setInterval(load, 30000);
+    setInterval(() => load(false), 30000);
   </script>
 </body>
 </html>
